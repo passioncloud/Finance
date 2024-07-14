@@ -1,0 +1,30 @@
+ .combobox-container {
+     position: relative;
+
+
+     .combobox-options {
+         position: absolute;
+         z-index: 5;
+        //  background-color: pink; // to hide the elements behind
+         padding: 8px;
+         border: 1px solid gray;
+        //  min-width: 100%;
+
+         table {
+             table-layout: fixed;
+
+             tr {
+                cursor: pointer;
+             }
+
+             td {
+                 white-space: nowrap;
+                 overflow: hidden;
+                 text-overflow: ellipsis;
+             }
+         }
+     }
+ }
+
+
+

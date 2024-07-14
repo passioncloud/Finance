@@ -1,0 +1,91 @@
+// Layout design for entire app (main content)
+
+$leftSideBarWidth: 18em;
+$contentWidth: 1fr;
+
+.page-layout {
+    height: 100vh;
+    display: grid;
+    grid-template-columns:
+        [left-sidebar-start] $leftSideBarWidth [left-sidebar-end content-start] $contentWidth [content-end];
+
+    grid-template-rows:
+        [header-start] auto [header-end content-start] 1fr [content-end];
+
+
+    // Header
+    .header {
+        // Define its position in parent grid layout
+        grid-row-start: header-start;
+        grid-row-end: header-end;
+        grid-column-start: left-sidebar-start;
+        grid-column-end: content-end;
+
+        // Display as grid too;
+        display: grid;
+        column-gap: 4px;
+        // grid-auto-rows: auto;
+        grid-auto-rows: auto;
+        grid-template-columns:
+            [left-sidebar-start] $leftSideBarWidth [left-sidebar-end content-start] $contentWidth [content-end] ;
+
+        .hr {
+            grid-column-start: left-sidebar-start;
+            grid-column-end: content-end;
+            height: 0.5px;
+            box-shadow: none;
+            color: initial;
+            background-color: gray;
+            color: black;
+
+        }
+    }
+
+    // Main content
+    .main {
+        // Define its position in parent grid
+        grid-row-start: content-start;
+        grid-row-end: content-end;
+        grid-column-start: left-sidebar-start;
+        grid-column-end: content-end;
+        overflow: scroll;
+
+        // Display as grid too;
+        display: grid;
+        column-gap: 4px;
+        grid-template-rows:
+            [actions-section-start left-sidebar-start] auto [actions-section-end left-sidebar-start table-start] 1fr [left-sidebar-end table-end];
+
+        grid-template-columns:
+            [left-sidebar-start] $leftSideBarWidth [left-sidebar-end actions-section-start content-start] $contentWidth [content-end actions-section-end];
+
+
+        .actions-section {
+            grid-area: actions-section;
+        }
+
+        .left-sidebar {
+            grid-area: left-sidebar;
+            background-color: rgb(34, 118, 66);
+         }
+
+        .content {
+            grid-column-start: content-start;
+            grid-column-end: content-end;
+        }
+
+
+    }
+}
+
+.header-content {
+    grid-column-start: left-sidebar-start;
+    grid-column-end: content-end;
+}
+
+@media (min-width: 40em) {
+    .header-content {
+        grid-column-start: content-start;
+        grid-column-end: content-end;
+    }
+}

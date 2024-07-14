@@ -1,0 +1,172 @@
+// See: https://codepen.io/takaneichinose/pen/QWyXjNP
+
+// --tw-ring-color: yellow;
+$borderColor : rgb(211, 214, 218) ; //rgb(193, 225, 192);
+$focusedBorderColor:darken( rgb(217, 240, 242), 50%);
+table,
+tr,
+td {
+    border: border-collapse;
+}
+
+table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+
+    thead {
+        tr {
+            th {
+                padding: 8px 4px;
+                text-align: start;
+                border-left: 0;
+                border-right: 0;
+                font-weight: bold;
+            }
+        }
+    }
+
+    tbody {
+        tr.readonly {
+            border-bottom: 1px solid $borderColor;
+            border-top: 1px solid $borderColor;
+
+            td {
+                padding: 8px 4px;
+            }
+
+            &:hover {
+                background-color: rgb(236, 234, 234);
+            }
+        }
+
+        tr.editable {
+            transition: background-color 200ms ease-out;
+            transition: background-color 100ms ease-in;
+            // use 2px because using 1px does not balance well when a neighboring cell gets selected 
+            // when a neighboring cell gets selected ie focused, a border of 1px gets applied which distorts the table uncomfortably 
+            border: 18px solid $borderColor;
+            border-width: 1px;
+
+            &:hover {
+                //    border: 1.2px solid pink;
+                // background-color: pink;
+                // border: 0;
+            }
+
+            td {
+                border: solid 1px $borderColor;
+                border-collapse: collapse;
+                // works hand-in-hand with padding in :focus-within to counterract increase in :focus-within border-width
+                // so that the screen doesnt wobble too much
+                padding: 1px;
+
+                &:focus-within {
+                    // background-color: pink;
+                    border: 2px solid $focusedBorderColor;
+                      // balances out increase in :focus-within border-width
+                    padding: 0px;
+                }
+
+                input:focus, select:focus {
+                    // overwrite default bluish color
+                    --tw-ring-color: none;
+                }
+
+                &:hover {
+                    // border: 0px solid $hover-background-color;
+                }
+
+                // div {
+                //     .long-text {
+                //         max-width: 256px;
+                //         text-align: initial;
+                //         padding: 4px;
+                //     }
+
+                //     // Do not set height on this div
+                //     // otherwise it will break the react-datepicker
+                //     display: block;
+                //     margin: 0;
+                //     width: 100%;
+                //     text-align: center;
+
+                    input, span {
+                        width: 100%;
+                        background-color: inherit;
+                        border: 0; // this is a very important property and is key to this design
+                        padding: 0px 8px;
+           
+
+                       
+                       
+                        &:hover {
+                            &:read-only {
+                                // background-color: rgb(250, 174, 174);
+                            }
+
+                            // border: 0px solid $hover-background-color;
+                        }
+                    }
+
+                    input[type="checkbox"] {
+                        margin: 4px 8px;
+                        height: 14px;
+                        width: 14px;
+                    }
+
+                    select {
+                        width: 100%;
+                        height: 100%;
+                        border: 0;
+                        background-color: inherit;
+
+                        &:disabled {
+                            opacity: 0.96;
+                        }
+
+                        padding: 0px 8px;
+                    }
+
+                    &.attachment {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        label {
+
+                            input {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+
+                input[type="checkbox"] {
+                    margin: 4px 8px;
+                }
+
+                input, select { 
+                    outline: none;
+                }
+            // }
+        }
+    }
+
+}
+
+
+// th.span-2,
+// td.span-2 {
+//     column-span: 2;
+// }
+
+// override tailwind
+// input:focus {
+//     border: 1px solid rgb(50, 50, 167);
+// }
+
+// input:focus, input:focus-visible, input:active {
+//     border: 1px solid yellow !important;
+// }

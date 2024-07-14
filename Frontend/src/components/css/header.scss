@@ -1,0 +1,34 @@
+header {
+    background-color: rgb(87, 148, 113);
+    padding: 8px 32px;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+
+    .left {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .logo {
+            height: 52px;
+            // width: 36px;
+        }
+
+        .name {
+            font-weight: bold;
+            margin-left: 16px;
+            font-size: larger;
+        }
+    }
+}
+
+
+.header-img {
+    height: 2em;
+}
+
+
