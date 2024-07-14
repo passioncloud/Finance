@@ -21,7 +21,7 @@ import Invoices from './components/invoices/list'
 import NewInvoice from './components/invoices/new'
 import EditInvoice from './components/invoices/edit'
 import { PageLayout2 } from './components/PageLayout2'
-import { List2 } from './components/customers/list-2';
+import { List2 } from './components/customers/list';
 
 
 const router = createBrowserRouter([

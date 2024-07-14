@@ -57,7 +57,6 @@ const useStyles = makeStyles({
         flex: "1",
         padding: "16px",
         display: "grid",
-        justifyContent: "flex-start",
         alignItems: "flex-start",
     },
     field: {

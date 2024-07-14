@@ -17,7 +17,7 @@ public class CustomerController(ApiDbContext apiDbContext) : ControllerBase
     [HttpGet]
     public IEnumerable<Customer> GetCustomers()
     {
-        return apiDbContext.Customers;
+        return apiDbContext.Customers.OrderBy(customer => customer.Name);
     }
 
     [HttpGet]

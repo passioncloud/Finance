@@ -1,90 +1,110 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../catalyst/table"
-import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from "../catalyst/dropdown"
-import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
-import { Link } from "../catalyst/link"
-import _ from "lodash"
-import { SkeletonTableBody } from "../SkeletonTable"
-import { useCustomersQuery } from "./service"
-import { ErrorBox } from "../ErrorBox"
-import CustomersCommandBar from "./list-commandbar-2"
-import { Breadcrumb, BreadcrumbItem, BreadcrumbButton, BreadcrumbDivider, Title3 } from "@fluentui/react-components"
+import * as React from "react";
+import {
+    FolderRegular,
+    EditRegular,
+    OpenRegular,
+    DocumentRegular,
+    PeopleRegular,
+    DocumentPdfRegular,
+    VideoRegular,
+} from "@fluentui/react-icons";
+import {
+    TableBody,
+    TableCell,
+    TableRow,
+    Table,
+    TableHeader,
+    TableHeaderCell,
+    TableCellLayout,
+    PresenceBadgeStatus,
+    Avatar,
+    Breadcrumb,
+    BreadcrumbButton,
+    BreadcrumbItem,
+    Title3,
+    Field,
+    SearchBox,
+} from "@fluentui/react-components";
+import { ErrorBox } from "../ErrorBox";
+import { useCustomersQuery } from "./service";
+import { SkeletonTableBody } from "../SkeletonTable";
+import { Link } from "react-router-dom";
+import CustomersCommandBar from "./list-commandbar-2";
+
+
+
+const columns = [
+    { columnKey: "name", label: "Name" },
+    { columnKey: "phoneNo", label: "Phone No" },
+    { columnKey: "email", label: "Email" },
+    { columnKey: "address", label: "Address" },
+];
 
 function LoadingScreen() {
     return (<SkeletonTableBody columns={5} rows={3} />)
 }
+export const List2 = () => {
+    const { data, isLoading, error } = useCustomersQuery()
+    const customers = data || [];
 
-export default function Customers() {
+    if (error) {
+        return <ErrorBox errorMessage={error} />
+    }
+
+    const items = customers.map(customer => ({
+        id: { label: customer.Id },
+        name: { label: customer.Name },
+        email: { label: customer.Email },
+        phoneNo: { label: customer.PhoneNo },
+        address: { label: customer.Address }
+    }))
+
     return (
         <div>
             <Breadcrumb>
                 <BreadcrumbItem>
-                    <Link href="/customers">
+                    <Link to="/customers">
                         <BreadcrumbButton current>Customers</BreadcrumbButton>
                     </Link>
                 </BreadcrumbItem>
             </Breadcrumb>
             <Title3>Customers</Title3>
             <CustomersCommandBar />
-
-            <Table>
-                <TableHead>
+                <Field>
+                    <SearchBox placeholder="Search" />
+                </Field>
+            <Table style={{ minWidth: "510px" }}>
+                <TableHeader>
                     <TableRow>
-                        <TableHeader>Name</TableHeader>
-                        <TableHeader className="relative w-0">
-                            <span className="sr-only">Actions</span>
-                        </TableHeader>
-                        <TableHeader>Phone No</TableHeader>
-                        <TableHeader>Email</TableHeader>
+                        {columns.map((column) => (
+                            <TableHeaderCell key={column.columnKey}>
+                                <b>{column.label}</b>
+                            </TableHeaderCell>
+                        ))}
                     </TableRow>
-                </TableHead>
-                <CustomersTableBody />
-
+                </TableHeader>
+                {isLoading && <LoadingScreen />}
+                {!isLoading &&
+                    <TableBody>
+                        {items.map((item) => (
+                            <TableRow key={item.name.label}>
+                                <TableCell color="blue">
+                                    <Link to={`/customers/${item.id.label}`} style={{ color: 'blue' }}>
+                                        {item.name.label}
+                                    </Link>
+                                </TableCell>
+                                <TableCell>
+                                    {item.phoneNo.label}
+                                </TableCell>
+                                <TableCell>{item.email.label}</TableCell>
+                                <TableCell>
+                                    {item.address.label}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                }
             </Table>
         </div>
-    )
-}
-
-function CustomersTableBody() {
-    const { data, isLoading, error } = useCustomersQuery()
-    const customers = data;
-
-    if (error) {
-        return <ErrorBox errorMessage={error} />
-    }
-
-    if (isLoading) {
-        return (
-            <LoadingScreen />
-        )
-    }
-
-    return (
-        <TableBody>
-            {customers!.map((customer) => (
-                <TableRow key={customer.Id} className="py-1">
-                    <TableCell className="font-medium">
-                        <Link href={`${customer.Id}`} className="nav-link">{customer.Name}</Link>
-
-                    </TableCell>
-                    <TableCell>
-                        <span>
-                            <Dropdown>
-                                <DropdownButton plain aria-label="More options">
-                                    <EllipsisVerticalIcon />
-                                </DropdownButton>
-                                <DropdownMenu anchor="bottom start">
-                                    <DropdownItem href={`${customer.Id}`}>
-                                        View
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </span>
-                    </TableCell>
-                    <TableCell>{customer.PhoneNo}</TableCell>
-                    <TableCell>{customer.Email}</TableCell>
-                </TableRow>
-            ))}
-        </TableBody>
-    )
-}
+    );
+};

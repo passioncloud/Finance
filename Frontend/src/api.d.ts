@@ -23,6 +23,7 @@ interface Customer {
     PhoneNo: string,
     Address: string,
     Email: string ,
+    TIN: string,
     CreatedAt?: string,
     UpdatedAt?: string 
 }

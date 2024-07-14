@@ -91,36 +91,41 @@ function NewCustomerForm() {
     const handleSubmit = async () => {
         const r = await createCustomer(form)
         if (!r.error)
-            navigate(`/customers/${r.data?.Id}`)
+            navigate(`/customers`)
     }
 
     return (
         <div>
             <form>
-                <p>dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</p>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
                     <MyInputField
-                        name="name"
+                        name="Name"
                         value={form.Name}
                         label="Name"
                         onChange={onFormChange}
                     />
                     <MyInputField
-                        name="phoneNo"
+                        name="PhoneNo"
                         value={form.PhoneNo}
                         label="Phone No"
                         onChange={onFormChange}
                     />
                     <MyInputField
-                        name="email"
+                        name="Email"
                         value={form.Email}
                         label="Email"
                         onChange={onFormChange}
                     />
                     <MyInputField
-                        name="address"
+                        name="Address"
                         value={form.Address}
                         label="Address"
+                        onChange={onFormChange}
+                    />
+                    <MyInputField
+                        name="TIN"
+                        value={form.TIN}
+                        label="TIN"
                         onChange={onFormChange}
                     />
                 </div>
