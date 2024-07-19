@@ -1,10 +1,14 @@
-import { useNavigate, useParams } from "react-router-dom"
+import {
+    CommandBar,
+    ICommandBarItemProps
+} from "@fluentui/react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { useDeleteItemMutation } from "./service"
-import { Link } from "../catalyst/link"
 
 
 export default function EditItemCommandBar() {
-    const params = useParams() as {id: string }
+    const params = useParams() as {Id: string }
     const [deleteItem] = useDeleteItemMutation()
     const navigate = useNavigate()
 
@@ -13,19 +17,37 @@ export default function EditItemCommandBar() {
         deleteItem(params)
     }
 
+    function handleBack() {
+        navigate('/items')
+    }
+
+    const _items: ICommandBarItemProps[] = [
+        {
+            key: "Back",
+            text: "Back",
+            iconProps: { iconName: "Back" },
+            onClick: handleBack
+        },
+        {
+            key: "Delete",
+            text: "Delete",
+            iconProps: { iconName: "Delete" },
+            onClick: handleDelete
+        },
+    ];
 
     return (
-        <div className="commandbar">
-            <ul>
-                <li>
-                    <Link href="/items">Back</Link>
-                </li>
-                <li>
-                    <button onClick={handleDelete}>
-                        Delete
-                    </button>
-                </li>
-            </ul>
+        <div>
+            <CommandBar
+                items={_items}
+            />
         </div>
-    )
-}
+    );
+};
+
+
+
+
+
+
+

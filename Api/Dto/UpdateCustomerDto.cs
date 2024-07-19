@@ -14,11 +14,11 @@ public class UpdateCustomerDto
     public Customer UpdateCustomer(ApiDbContext dbContext)
     {
         Customer customer = dbContext.Customers.Find(Id) ?? throw new Exception($"No customer found with Id {Id}");
-        Name = Name;
-        Email = Email;
-        PhoneNo = PhoneNo;
-        Address = Address;
-        TIN = TIN;
+        customer.Name = Name;
+        customer.Email = Email;
+        customer.PhoneNo = PhoneNo;
+        customer.Address = Address;
+        customer.TIN = TIN;
         customer.UpdatedBy = "ADMIN";
         customer.UpdatedAt = DateTime.Now;
         return customer;

@@ -1,19 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { Fieldset, Label } from "../catalyst/fieldset";
-import { Input } from "../catalyst/input";
-import { ChangeEvent, useState } from "react";
-import { useParams } from "react-router-dom";
-
 import { ErrorBox } from "../ErrorBox";
-import { Button } from "../catalyst/button";
 import { useItemByIdQuery, useUpdateItemMutation } from "./service";
 import EditItemCommandBar from "./edit-commandbar";
 import SkeletonDocument from "../SkeletonDocument";
+import { MyInputField } from "../MyInputField";
+import { ChangeEvent, ChangeEventHandler, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button, Breadcrumb, BreadcrumbItem, BreadcrumbButton, BreadcrumbDivider, Title3, CardFooter } from "@fluentui/react-components";
 
+import { Link } from 'react-router-dom';
 
 export default function EditItem() {
-    const params = useParams() as { id: string }
+    const params = useParams() as { Id: string }
+    console.log(params)
     const { data, isLoading, error } = useItemByIdQuery(params)
     const item = data
 
@@ -22,12 +21,23 @@ export default function EditItem() {
 
     return (
         <div className="p-2">
-            <h1 className="mt-4 mb-4"><b>Edit Item - {item?.id}</b></h1>
-
-            {/* <Breadcrumbs /> */}
+    <Breadcrumb aria-label="Breadcrumb default example">
+                <BreadcrumbItem>
+                    <Link to="/items">
+                        <BreadcrumbButton>Items</BreadcrumbButton>
+                    </Link>
+                </BreadcrumbItem>
+                <BreadcrumbDivider />
+                <BreadcrumbItem>
+                    <BreadcrumbButton href={`/items/${params.Id}`} current>
+                        Edit Item
+                    </BreadcrumbButton>
+                </BreadcrumbItem>
+            </Breadcrumb>
+            <Title3>Edit Item - {item?.Name}</Title3>
             <EditItemCommandBar />
-            { isLoading && <SkeletonDocument   fields={['Id', 'Name', 'Phone No', 'Email', 'Address']} /> }
-            { !isLoading && <EditItemForm item={item!} /> }
+            {isLoading && <SkeletonDocument fields={['Id', 'Name', 'Price', 'Cost']} />}
+            {!isLoading && <EditItemForm item={item!} />}
         </div>
     )
 
@@ -35,7 +45,7 @@ export default function EditItem() {
 
 
 function EditItemForm({ item }: { item: Item }) {
-    const readOnly = false;
+    const navigate = useNavigate()
     const [form, setForm] = useState(item)
     const [updateItem, { isLoading }] = useUpdateItemMutation()
     const onFormChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -47,42 +57,46 @@ function EditItemForm({ item }: { item: Item }) {
     }
 
     const handleSubmit = async () => {
-        await updateItem(form)
+        const r = await updateItem(form)
+        if (!r.error)
+            navigate(`/items`)
     }
 
     return (
-
-        <form>
-            <Fieldset>
-                <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
-                    <div>
-                        <Label>Id</Label>
-                        <Input value={form.id} name="id" readOnly={true} onChange={onFormChange} />
+        <div>
+            <form>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4">
+                 
+                    <MyInputField
+                        name="Name"
+                        value={form.Name}
+                        label="Name"
+                        onChange={onFormChange}
+                    />
+                    <MyInputField
+                        name="Price"
+                        value={form.Price}
+                        label="Price"
+                        onChange={onFormChange}
+                    />
+                    <MyInputField
+                        name="Cost"
+                        value={form.Cost}
+                        label="Cost"
+                        onChange={onFormChange}
+                    />
+                    
                     </div>
-
-                    <div>
-                        <Label>Name</Label>
-                        <Input value={form.name} readOnly={readOnly} name="name" onChange={onFormChange} />
-                    </div>
-
-                    <div>
-                        <Label>Price</Label>
-                        <Input value={form.price} readOnly={readOnly} name="price" onChange={onFormChange} />
-                    </div>
-                    <div>
-                        <Label>Cost</Label>
-                        <Input value={form.cost} readOnly={readOnly} name="cost" onChange={onFormChange} />
-                    </div>
-                    <div>
-                        <Label>Vat Percentage</Label>
-                        <Input value={form.vatPercentage} readOnly={readOnly} name="vatPercentage" onChange={onFormChange} />
-                    </div>
-
-
-                </div>
-            </Fieldset>
-            <Button className="mt-4" color="green" onClick={handleSubmit} disabled={isLoading}>Save</Button>
-        </form>
+            </form>
+            <CardFooter>
+                <Button
+                    appearance="primary"
+                    className="mt-4"
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                >Save</Button>
+            </CardFooter>
+        </div>
     )
 }
 

@@ -7,8 +7,8 @@ import keycloakService from "../../keycloak-service";
 
 
 const { baseUrl } = configuration
-export const publicHolidayServiceApi = createApi({
-    reducerPath: 'PublicHoliday',
+export const itemServiceApi = createApi({
+    reducerPath: 'Item',
     baseQuery: fetchBaseQuery({
         baseUrl,
         prepareHeaders: (headers) => {
@@ -19,46 +19,46 @@ export const publicHolidayServiceApi = createApi({
         },
     }),
 
-    tagTypes: ['PublicHolidays'],
+    tagTypes: ['Items'],
     endpoints: (builder) => ({
-        publicHolidays: builder.query<PublicHoliday[], void>({
-            query: () => 'PublicHoliday',
-            providesTags: ['PublicHolidays'],
+        items: builder.query<Item[], void>({
+            query: () => 'items',
+            providesTags: ['Items'],
             transformErrorResponse,
         }),
-        publicHolidayById: builder.query<PublicHoliday, { id: string }>({
-            query: (args) => `PublicHoliday/${args.id}`,
-            providesTags: ['PublicHolidays'],
+        itemById: builder.query<Item, { id: string }>({
+            query: (args) => `items/${args.id}`,
+            providesTags: ['Items'],
             transformErrorResponse,
         }),
-        createPublicHoliday: builder.mutation<PublicHoliday, PublicHoliday>({
+        createItem: builder.mutation<Item, Item>({
             query: (args) => ({
-                url: `PublicHoliday`,
+                url: `items`,
                 method: 'POST',
-                providesTags: ['PublicHolidays'],
+                providesTags: ['Items'],
                 body: args
             }),
             transformErrorResponse,
-            invalidatesTags: ['PublicHolidays'],
+            invalidatesTags: ['Items'],
 
         }),
 
-        updatePublicHoliday: builder.mutation<PublicHoliday, PublicHoliday>({
+        updateItem: builder.mutation<Item, Item>({
             query: args => ({
-                url: `PublicHoliday/${args.Id}`,
+                url: `items/${args.Id}`,
                 method: 'PATCH',
                 body: args
             }),
             transformResponse: (response) => transformResponseWithSnackbar(response, 'Saved successfully'),
             transformErrorResponse,
-            invalidatesTags: ['PublicHolidays']
+            invalidatesTags: ['Items']
         }),
-        deletePublicHoliday: builder.mutation<void, { id: string }>({
+        deleteItem: builder.mutation<void, { id: string }>({
             query: ({ id }) => ({
-                url: `PublicHoliday/${id}`,
+                url: `items/${id}`,
                 method: 'delete',
             }),
-            invalidatesTags: ['PublicHolidays'],
+            invalidatesTags: ['Items'],
             transformErrorResponse,
         }),
     })
@@ -76,10 +76,10 @@ function transformResponseWithSnackbar(response: any, message: string) {
 }
 
 export const {
-    usePublicHolidaysQuery,
-    usePublicHolidayByIdQuery,
-    useUpdatePublicHolidayMutation,
-    useCreatePublicHolidayMutation,
-    useDeletePublicHolidayMutation,
+    useItemsQuery,
+    useItemByIdQuery,
+    useUpdateItemMutation,
+    useCreateItemMutation,
+    useDeleteItemMutation,
 
-} = publicHolidayServiceApi;
+} = itemServiceApi;

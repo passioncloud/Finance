@@ -11,7 +11,6 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './components/css/page-layout.scss';
 import Users from './components/users/Users'
 
-import Customers from './components/customers/list'
 import NewCustomer from './components/customers/new'
 import EditCustomer from './components/customers/edit'
 import Items from './components/items/list'
@@ -21,7 +20,7 @@ import Invoices from './components/invoices/list'
 import NewInvoice from './components/invoices/new'
 import EditInvoice from './components/invoices/edit'
 import { PageLayout2 } from './components/PageLayout2'
-import { List2 } from './components/customers/list';
+import Customers from './components/customers/list';
 
 
 const router = createBrowserRouter([
@@ -42,14 +41,14 @@ const router = createBrowserRouter([
         
             {
                 path: '/customers',
-                element: <List2 />
+                element: <Customers />
             },
             {
                 path: '/customers/new',
                 element: <NewCustomer />
             },
             {
-                path: '/customers/:id',
+                path: '/customers/:Id',
                 element: <EditCustomer />
             },
             {
@@ -61,7 +60,7 @@ const router = createBrowserRouter([
                 element: <NewItem />
             },
             {
-                path: '/items/:id',
+                path: '/items/:Id',
                 element: <EditItem />
             },
             {

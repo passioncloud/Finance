@@ -1,84 +1,105 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../catalyst/table"
-import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from "../catalyst/dropdown"
-import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
-import { Link } from "../catalyst/link"
-import _ from "lodash"
-import { SkeletonTableBody } from "../SkeletonTable"
-import { useItemsQuery } from "./service"
-import { ErrorBox } from "../ErrorBox"
-import ItemsCommandBar from "./list-commandbar"
+import * as React from "react";
+import {
+    FolderRegular,
+    EditRegular,
+    OpenRegular,
+    DocumentRegular,
+    PeopleRegular,
+    DocumentPdfRegular,
+    VideoRegular,
+} from "@fluentui/react-icons";
+import {
+    TableBody,
+    TableCell,
+    TableRow,
+    Table,
+    TableHeader,
+    TableHeaderCell,
+    TableCellLayout,
+    PresenceBadgeStatus,
+    Avatar,
+    Breadcrumb,
+    BreadcrumbButton,
+    BreadcrumbItem,
+    Title3,
+    Field,
+    SearchBox,
+} from "@fluentui/react-components";
+import { ErrorBox } from "../ErrorBox";
+import { useItemsQuery } from "./service";
+import { SkeletonTableBody } from "../SkeletonTable";
+import { Link, useSearchParams } from "react-router-dom";
+import ItemsCommandBar from "./list-commandbar";
+
+
+
+const columns = [
+    { columnKey: "Name", label: "Name" },
+    { columnKey: "Price", label: "Price" },
+    { columnKey: "Cost", label: "Cost" },
+];
 
 function LoadingScreen() {
     return (<SkeletonTableBody columns={5} rows={3} />)
 }
-
 export default function Items() {
-    return (
-        <div className="p-2">
-            <h1 className="mt-4 mb-4 ml-2"><b>Items</b></h1>
-            <ItemsCommandBar />
-
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableHeader>Id</TableHeader>
-                        <TableHeader className="relative w-0">
-                            <span className="sr-only">Actions</span>
-                        </TableHeader>
-                        <TableHeader>Name</TableHeader>
-                        <TableHeader>Price</TableHeader>
-                        <TableHeader>Cost</TableHeader>
-                    </TableRow>
-                </TableHead>
-                <ItemsTableBody />
-
-            </Table>
-        </div>
-    )
-}
-
-function ItemsTableBody() {
-    const { data, isLoading, error } = useItemsQuery()
-    const items = data;
+    const [searchParams, setSearchParams] = useSearchParams()
+    const search = searchParams.get('search') ?? ''
+    const { data, isLoading, error } = useItemsQuery(search)
+    const items = data || [];
 
     if (error) {
         return <ErrorBox errorMessage={error} />
     }
 
-    if (isLoading) {
-        return (
-            <LoadingScreen />
-        )
-    }
+    const tableBodyItems = items.map(item => ({
+        Id: { label: item.Id },
+        Name: { label: item.Name },
+        Price: { label: item.Price },
+        Cost: { label: item.Cost },
+    }))
 
     return (
-        <TableBody>
-            {items!.map((item) => (
-                <TableRow key={item.id}>
-                    <TableCell className="font-medium">
-                        <Link href={item.id} className="nav-link">{item.id}</Link>
-
-                    </TableCell>
-                    <TableCell>
-                        <span>
-                            <Dropdown>
-                                <DropdownButton plain aria-label="More options">
-                                    <EllipsisVerticalIcon />
-                                </DropdownButton>
-                                <DropdownMenu anchor="bottom start">
-                                    <DropdownItem href={`${item.id}`}>
-                                        View
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </span>
-                    </TableCell>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.price}</TableCell>
-                    <TableCell>{item.cost}</TableCell>
-                </TableRow>
-            ))}
-        </TableBody>
-    )
-}
+        <div>
+            <Breadcrumb>
+                <BreadcrumbItem>
+                    <Link to="/items">
+                        <BreadcrumbButton current>Items</BreadcrumbButton>
+                    </Link>
+                </BreadcrumbItem>
+            </Breadcrumb>
+            <Title3>Items</Title3>
+            <ItemsCommandBar />
+                
+            <Table style={{ minWidth: "510px" }}>
+                <TableHeader>
+                    <TableRow>
+                        {columns.map((column) => (
+                            <TableHeaderCell key={column.columnKey}>
+                                <b>{column.label}</b>
+                            </TableHeaderCell>
+                        ))}
+                    </TableRow>
+                </TableHeader>
+                {isLoading && <LoadingScreen />}
+                {!isLoading &&
+                    <TableBody>
+                        {tableBodyItems.map((item) => (
+                            <TableRow key={item.Name.label}>
+                                <TableCell color="blue">
+                                    <Link to={`/items/${item.Id.label}`} style={{ color: 'blue' }}>
+                                        {item.Name.label}
+                                    </Link>
+                                </TableCell>
+                                <TableCell>
+                                    {item.Price.label}
+                                </TableCell>
+                                <TableCell>{item.Cost.label}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                }
+            </Table>
+        </div>
+    );
+};

@@ -28,8 +28,8 @@ import {
 import { ErrorBox } from "../ErrorBox";
 import { useCustomersQuery } from "./service";
 import { SkeletonTableBody } from "../SkeletonTable";
-import { Link } from "react-router-dom";
-import CustomersCommandBar from "./list-commandbar-2";
+import { Link, useSearchParams } from "react-router-dom";
+import CustomersCommandBar from "./list-commandbar";
 
 
 
@@ -43,8 +43,10 @@ const columns = [
 function LoadingScreen() {
     return (<SkeletonTableBody columns={5} rows={3} />)
 }
-export const List2 = () => {
-    const { data, isLoading, error } = useCustomersQuery()
+const Customers = () => {
+    const [searchParams, setSearchParams] = useSearchParams()
+    const search = searchParams.get('search') ?? ''
+    const { data, isLoading, error } = useCustomersQuery(search)
     const customers = data || [];
 
     if (error) {
@@ -70,9 +72,7 @@ export const List2 = () => {
             </Breadcrumb>
             <Title3>Customers</Title3>
             <CustomersCommandBar />
-                <Field>
-                    <SearchBox placeholder="Search" />
-                </Field>
+                
             <Table style={{ minWidth: "510px" }}>
                 <TableHeader>
                     <TableRow>
@@ -108,3 +108,5 @@ export const List2 = () => {
         </div>
     );
 };
+
+export default Customers;

@@ -5,19 +5,19 @@ import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { Link } from "../catalyst/link"
 import _ from "lodash"
 import { SkeletonTableBody } from "../SkeletonTable"
-import { usePublicHolidaysQuery } from "./service"
+import { useItemsQuery } from "./service"
 import { ErrorBox } from "../ErrorBox"
-import PublicHolidaysCommandBar from "./list-commandbar"
+import ItemsCommandBar from "./list-commandbar"
 
 function LoadingScreen() {
-    return (<SkeletonTableBody columns={9} rows={5} />)
+    return (<SkeletonTableBody columns={5} rows={3} />)
 }
 
-export default function PublicHolidays() {
+export default function Items() {
     return (
         <div className="p-2">
-            <h1 className="mt-4 mb-4 ml-2"><b>Public Holidays</b></h1>
-            <PublicHolidaysCommandBar />
+            <h1 className="mt-4 mb-4 ml-2"><b>Items</b></h1>
+            <ItemsCommandBar />
 
             <Table>
                 <TableHead>
@@ -26,21 +26,21 @@ export default function PublicHolidays() {
                         <TableHeader className="relative w-0">
                             <span className="sr-only">Actions</span>
                         </TableHeader>
-                        <TableHeader>Day</TableHeader>
-                        <TableHeader>Description</TableHeader>
-                        <TableHeader>Year</TableHeader>
+                        <TableHeader>Name</TableHeader>
+                        <TableHeader>Price</TableHeader>
+                        <TableHeader>Cost</TableHeader>
                     </TableRow>
                 </TableHead>
-                <ListTableBody />
+                <ItemsTableBody />
 
             </Table>
         </div>
     )
 }
 
-function ListTableBody() {
-    const { data, isLoading, error } = usePublicHolidaysQuery()
-    const publicHolidays = data;
+function ItemsTableBody() {
+    const { data, isLoading, error } = useItemsQuery()
+    const items = data;
 
     if (error) {
         return <ErrorBox errorMessage={error} />
@@ -54,29 +54,29 @@ function ListTableBody() {
 
     return (
         <TableBody>
-            {publicHolidays!.map((publicHoliday) => (
-                <TableRow key={publicHoliday.Id}>
+            {items!.map((item) => (
+                <TableRow key={item.Id}>
                     <TableCell className="font-medium">
-                        <Link href={publicHoliday.Id.toString()} className="nav-link">{publicHoliday.Id}</Link>
+                        <Link href={item.Id} className="nav-link">{item.Id}</Link>
 
                     </TableCell>
                     <TableCell>
-                        <div className="-mx-3 -my-1.5 sm:-mx-2.5">
+                        <span>
                             <Dropdown>
                                 <DropdownButton plain aria-label="More options">
                                     <EllipsisVerticalIcon />
                                 </DropdownButton>
                                 <DropdownMenu anchor="bottom start">
-                                    <DropdownItem href={`${publicHoliday.Id}`}>
+                                    <DropdownItem href={`${item.Id}`}>
                                         View
                                     </DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
-                        </div>
+                        </span>
                     </TableCell>
-                    <TableCell>{publicHoliday.Day.split('T')[0]}</TableCell>
-                    <TableCell>{publicHoliday.Description}</TableCell>
-                    <TableCell>{publicHoliday.Year}</TableCell>
+                    <TableCell>{item.Name}</TableCell>
+                    <TableCell>{item.Price}</TableCell>
+                    <TableCell>{item.Cost}</TableCell>
                 </TableRow>
             ))}
         </TableBody>

@@ -1,17 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { useCreatePublicHolidayMutation, useDeletePublicHolidayMutation } from "./service"
+import { useDeleteItemMutation } from "./service"
 import { Link } from "../catalyst/link"
 
 
-export default function EditPublicHolidayCommandBar() {
+export default function EditItemCommandBar() {
     const params = useParams() as {id: string }
-    // const [createPurchaseRequisition, createResult] = useCreatePurchaseRequisitionMutation()
-    const [deletePublicHoliday] = useDeletePublicHolidayMutation()
+    const [deleteItem] = useDeleteItemMutation()
     const navigate = useNavigate()
 
     async function handleDelete() {
-        navigate('/public-holidays')
-        deletePublicHoliday(params)
+        navigate('/items')
+        deleteItem(params)
     }
 
 
@@ -19,7 +18,7 @@ export default function EditPublicHolidayCommandBar() {
         <div className="commandbar">
             <ul>
                 <li>
-                    <Link href="/public-holidays">Back</Link>
+                    <Link href="/items">Back</Link>
                 </li>
                 <li>
                     <button onClick={handleDelete}>

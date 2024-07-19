@@ -6,7 +6,6 @@ import { dashboardServiceApi } from './services/DashboardService'
 import { permissionsServiceApi } from './components/permissions/PermissionsService'
 import { employeeServiceApi } from './components/employees/EmployeeService'
 import { customerServiceApi } from './components/customers/service'
-import { publicHolidayServiceApi } from './components/public-holidays/service'
 import { itemServiceApi } from './components/items/service'
 import { invoiceServiceApi } from './components/invoices/service'
 
@@ -21,10 +20,8 @@ export const store = configureStore({
         [customerServiceApi.reducerPath]: customerServiceApi.reducer,
         [itemServiceApi.reducerPath]: itemServiceApi.reducer,
         [invoiceServiceApi.reducerPath]: invoiceServiceApi.reducer,
-        [publicHolidayServiceApi.reducerPath]: publicHolidayServiceApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
-        publicHolidayServiceApi.middleware,
         employeeServiceApi.middleware,
         customerServiceApi.middleware,
         itemServiceApi.middleware,

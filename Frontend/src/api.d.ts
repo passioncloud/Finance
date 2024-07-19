@@ -30,13 +30,12 @@ interface Customer {
 
 
 interface Item {
-    id: string,
-    name: string,
-    cost: number,
-    price: number,
-    vatPercentage: number,
-    createdAt?: string,
-    updatedAt?: string 
+    Id: number,
+    Name: string,
+    Cost: number,
+    Price: number,
+    CreatedAt?: string,
+    UpdatedAt?: string 
 }
 
 interface Invoice {

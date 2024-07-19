@@ -21,13 +21,13 @@ export const customerServiceApi = createApi({
 
     tagTypes: ['Customers'],
     endpoints: (builder) => ({
-        customers: builder.query<Customer[], void>({
-            query: () => 'Customer',
+        customers: builder.query<Customer[], string>({
+            query: (search) => `Customer?search=${search}`,
             providesTags: ['Customers'],
             transformErrorResponse,
         }),
-        customerById: builder.query<Customer, { id: string }>({
-            query: (args) => `Customer/${args.id}`,
+        customerById: builder.query<Customer, { Id: string }>({
+            query: (args) => `Customer/${args.Id}`,
             providesTags: ['Customers'],
             transformErrorResponse,
         }),
@@ -53,9 +53,9 @@ export const customerServiceApi = createApi({
             transformErrorResponse,
             invalidatesTags: ['Customers']
         }),
-        deleteCustomer: builder.mutation<void, { id: string }>({
-            query: ({ id }) => ({
-                url: `Customer/${id}`,
+        deleteCustomer: builder.mutation<void, { Id: string }>({
+            query: ({ Id }) => ({
+                url: `Customer/${Id}`,
                 method: 'delete',
             }),
             invalidatesTags: ['Customers'],

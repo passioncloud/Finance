@@ -1,26 +1,12 @@
 
-import { Fieldset } from "../catalyst/fieldset";
 import { ChangeEvent, ChangeEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateCustomerMutation } from "./service";
-import { makeStyles, useId, Input, Label, Button, Field, Breadcrumb, BreadcrumbItem, BreadcrumbButton, BreadcrumbDivider, Title1, Title2, Title3, Card, CardFooter, CardPreview } from "@fluentui/react-components";
+import { Button, Breadcrumb, BreadcrumbItem, BreadcrumbButton, BreadcrumbDivider, Title3, CardFooter } from "@fluentui/react-components";
 
 import { Link } from 'react-router-dom';
 import NewCustomerCommandBar from "./new-commandbar";
-
-const MyInputField = ({ name, label, value, onChange }: { name: string, label: string, value: any, onChange: ChangeEventHandler<HTMLInputElement> }) => {
-    const inputId = useId(name);
-    return (
-        <Field
-            label={label}
-            validationState="success"
-        //   validationMessage="This is a success message."
-        >
-            <Input id={inputId} value={value} name={name} onChange={onChange} />
-        </Field>
-    )
-}
-
+import { MyInputField } from "../MyInputField";
 
 export default function NewCustomer() {
     return (
@@ -45,38 +31,14 @@ export default function NewCustomer() {
     )
 }
 
-
-
-
-const useFormStyles = makeStyles({
-    main: {
-        gap: "36px",
-        display: "flex",
-        flexDirection: "column",
-        flexWrap: "wrap",
-    },
-
-    card: {
-        marginTop: '16px',
-        width: "100%",
-        maxWidth: "100%",
-        height: "fit-content",
-    },
-
-    section: {
-        width: "fit-content",
-    },
-
-});
-
 function NewCustomerForm() {
-    const formStyles = useFormStyles()
     const [form, setForm] = useState<Customer>({
-        Id: '',
+        Id: 0,
         Name: '',
         Address: '',
         PhoneNo: '',
-        Email: ''
+        Email: '',
+        TIN: ''
     })
     const navigate = useNavigate()
     const [createCustomer, { isLoading }] = useCreateCustomerMutation()

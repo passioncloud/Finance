@@ -21,19 +21,19 @@ export const itemServiceApi = createApi({
 
     tagTypes: ['Items'],
     endpoints: (builder) => ({
-        items: builder.query<Item[], void>({
-            query: () => 'items',
+        items: builder.query<Item[], string>({
+            query: (search) => `Item?search=${search}`,
             providesTags: ['Items'],
             transformErrorResponse,
         }),
-        itemById: builder.query<Item, { id: string }>({
-            query: (args) => `items/${args.id}`,
+        itemById: builder.query<Item, { Id: string }>({
+            query: (args) => `Item/${args.Id}`,
             providesTags: ['Items'],
             transformErrorResponse,
         }),
         createItem: builder.mutation<Item, Item>({
             query: (args) => ({
-                url: `items`,
+                url: `Item`,
                 method: 'POST',
                 providesTags: ['Items'],
                 body: args
@@ -45,7 +45,7 @@ export const itemServiceApi = createApi({
 
         updateItem: builder.mutation<Item, Item>({
             query: args => ({
-                url: `items/${args.id}`,
+                url: `Item/${args.Id}`,
                 method: 'PATCH',
                 body: args
             }),
@@ -53,9 +53,9 @@ export const itemServiceApi = createApi({
             transformErrorResponse,
             invalidatesTags: ['Items']
         }),
-        deleteItem: builder.mutation<void, { id: string }>({
-            query: ({ id }) => ({
-                url: `items/${id}`,
+        deleteItem: builder.mutation<void, { Id: string }>({
+            query: ({ Id }) => ({
+                url: `Item/${Id}`,
                 method: 'delete',
             }),
             invalidatesTags: ['Items'],

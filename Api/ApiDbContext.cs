@@ -27,5 +27,6 @@ public class ApiDbContext(DbContextOptions<ApiDbContext> options) : IdentityDbCo
 
 
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<Item> Items { get;set; }
 
 }

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Api;
 using Api.Models;
 using Api.Dto;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 // using Api.Models;
 
 namespace Api.Controllers;
@@ -15,9 +17,17 @@ public class CustomerController(ApiDbContext apiDbContext) : ControllerBase
 {
 
     [HttpGet]
-    public IEnumerable<Customer> GetCustomers()
+    public IEnumerable<Customer> GetCustomers(string search = "")
     {
-        return apiDbContext.Customers.OrderBy(customer => customer.Name);
+        return apiDbContext.Customers
+        .Where(c => 
+            EF.Functions.Like(c.Name, $"%{search}%") ||
+            EF.Functions.Like(c.PhoneNo, $"%{search}%") ||
+            EF.Functions.Like(c.Email, $"%{search}%") ||
+            EF.Functions.Like(c.Address, $"%{search}%")  ||
+            EF.Functions.Like(c.TIN, $"%{search}%") 
+        )
+          .OrderBy(customer => customer.Name);
     }
 
     [HttpGet]
@@ -25,7 +35,7 @@ public class CustomerController(ApiDbContext apiDbContext) : ControllerBase
     public async Task<Customer> GetCustomer(int Id)
     {
         Customer? customer = await apiDbContext.Customers.FindAsync(Id);
-        if(customer == default) throw new Exception($"Customer ${Id} Not Found");
+        if (customer == default) throw new Exception($"Customer ${Id} Not Found");
         return customer;
     }
 
@@ -50,10 +60,10 @@ public class CustomerController(ApiDbContext apiDbContext) : ControllerBase
 
     [HttpDelete]
     [Route("{Id}")]
-    public async Task<NoContentResult> DeleteCustomer(string Id)
+    public async Task<NoContentResult> DeleteCustomer(int Id)
     {
         Customer? customer = await apiDbContext.Customers.FindAsync(Id);
-        if(customer == default) throw new Exception($"Customer ${Id} Not Found");
+        if (customer == default) throw new Exception($"Customer ${Id} Not Found");
         apiDbContext.Customers.Remove(customer);
         await apiDbContext.SaveChangesAsync();
         return NoContent();

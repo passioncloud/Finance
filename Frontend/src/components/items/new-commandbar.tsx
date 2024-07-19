@@ -6,19 +6,19 @@ import { useNavigate } from "react-router-dom";
 
 
 
-export default function CustomersCommandBar() {
+export default function NewItemCommandBar() {
     const navigate = useNavigate()
 
-    function handleNew() {
-        navigate('new')
+    function handleBack() {
+        navigate('/items')
     }
 
     const _items: ICommandBarItemProps[] = [
         {
-            key: "new",
-            text: "New",
-            iconProps: { iconName: "Add" },
-            onClick: handleNew
+            key: "back",
+            text: "Back",
+            iconProps: { iconName: "Back" },
+            onClick: handleBack
         },
     ];
 
