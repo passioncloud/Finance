@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.Models;
 
-public class Item
+public class Item : Model
 {
-    [Key]
-    public int Id { get;set;}
     public string Name { get;set;} = "";
     public decimal Price { get;set;}
     public decimal Cost { get;set;}

@@ -51,16 +51,16 @@ namespace Api.Services
                 StartPosting();
             else
                 ContinuePosting();
-            if (_genJournalLine.AccountNo != 0)
+            if (_genJournalLine.AccountId != Guid.Empty)
             {
-                if (_genJournalLine.BalAccountNo != 0 && (_genJournalLine.AccountType == GenJournalAccountType.Customer || _genJournalLine.AccountType == GenJournalAccountType.Vendor))
+                if (_genJournalLine.BalAccountId != Guid.Empty && (_genJournalLine.AccountType == GenJournalAccountType.Customer || _genJournalLine.AccountType == GenJournalAccountType.Vendor))
                 {
                     exchangeAccGLJournalLine.Run(_genJournalLine);
                     balancing = true;
                 }
                 PostGenJnlLine(balancing);
             }
-            if (_genJournalLine.BalAccountNo != 0)
+            if (_genJournalLine.BalAccountId != Guid.Empty)
             {
                 exchangeAccGLJournalLine.Run(_genJournalLine);
                 PostGenJnlLine(!balancing);
@@ -93,7 +93,7 @@ namespace Api.Services
 
         private bool EmptyLine()
         {
-            return _genJournalLine.AccountNo == 0 && _genJournalLine.Amount == 0 && _genJournalLine.BalAccountNo == 0;
+            return _genJournalLine.AccountId == Guid.Empty && _genJournalLine.Amount == 0 && _genJournalLine.BalAccountId == Guid.Empty;
         }
 
         public void OnBeforeStartOrContinuePosting()
@@ -129,12 +129,12 @@ namespace Api.Services
 
         private void PostGLAcc()
         {
-            GLAccount glAccount = postLineUtils.GetGLAccountById(_genJournalLine.AccountNo);
+            GLAccount glAccount = postLineUtils.GetGLAccountById(_genJournalLine.AccountId);
             GLEntry glEntry = InitGLEntry(glAccount.Id, _genJournalLine.AmountLCY);
             CheckGLAccDirectPosting();
             glEntry.GenPostingType = _genJournalLine.GenPostingType;
             glEntry.BalAccountType = _genJournalLine.BalAccountType;
-            glEntry.BalAccountNo = _genJournalLine.BalAccountNo ;
+            glEntry.BalAccountId = _genJournalLine.BalAccountId ;
             // store entry no to class variable for return 
             glEntryNo = glEntry.EntryNo;
             InitVAT(glEntry);
@@ -155,11 +155,11 @@ namespace Api.Services
 
         private void CheckGLAccDirectPosting()
         {
-            GLAccount glAccount = postLineUtils.GetGLAccountById(_genJournalLine.AccountNo);
+            GLAccount glAccount = postLineUtils.GetGLAccountById(_genJournalLine.Id);
             MyCheck.MustEqual(glAccount.DirectPosting, true);
         }
 
-        private GLEntry InitGLEntry(int glAccountNo, decimal amount)
+        private GLEntry InitGLEntry(Guid glAccountNo, decimal amount)
         {
             GLAccount glAccount = postLineUtils.GetGLAccountById(glAccountNo);
             // Check.NotEmptyNotNull(glAccountNo);
@@ -169,7 +169,7 @@ namespace Api.Services
             GLEntry glEntry = new GLEntry();
             glEntry.CopyFromGenJnlLine(_genJournalLine);
             glEntry.EntryNo = nextEntryNo;
-            glEntry.GLAccountNo = glAccountNo;
+            glEntry.GLAccountId = glAccountNo;
             glEntry.Amount = amount;
             return glEntry;
         }
@@ -235,7 +235,7 @@ namespace Api.Services
             }
         }
 
-        private void CreateGLEntry(int accountId, decimal amount)
+        private void CreateGLEntry(Guid accountId, decimal amount)
         {
             GLEntry glEntry = InitGLEntry(accountId, amount);
             InsertGLEntry(glEntry);

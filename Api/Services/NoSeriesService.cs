@@ -4,9 +4,9 @@ namespace Api.Services;
 
 public class NoSeriesService(ApiDbContext apiDbContext)
 {
-    public string NextNo(string NoSeriesNo)
+    public string NextNo(Guid NoSeriesId)
     {
-        NoSeries noSeries = apiDbContext.NoSeries.Single(n => n.No == NoSeriesNo);
+        NoSeries noSeries = apiDbContext.NoSeries.Find(NoSeriesId);
         string lastUsedNo = noSeries.LastUsedNo;
         string leadingText = ExtractTextAtStart(lastUsedNo);
         int numberAtEnd = ExtractNumberAtEnd(lastUsedNo);

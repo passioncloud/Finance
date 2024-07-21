@@ -18,12 +18,12 @@ namespace Api.Services
              return 1 + (lastGLEntry?.EntryNo ?? 0);
         }
 
-        public GLAccount GetGLAccountById(int Id)
+        public GLAccount GetGLAccountById(Guid Id)
         {
             return apiDbContext.GLAccounts.Find(Id);
         }
 
-        public VATPostingSetup GetVATPostingSetup(int VATBusPostingGroup, int VATProdPostingGroup)
+        public VATPostingSetup GetVATPostingSetup(Guid VATBusPostingGroup, Guid VATProdPostingGroup)
         {
             return apiDbContext.VATPostingSetups.First(v => v.VATBusinessPostingGroupId == VATBusPostingGroup && v.VATProductPostingGroupId == VATProdPostingGroup);
         }

@@ -4,14 +4,12 @@ using Api.Enums;
 
 namespace Api.Models;
 
-public class ApiHeader
+public class SalesHeader : Model
 {
-    [Key]
-    public int Id { get; set; }
     public SalesDocumentType DocumentType { get; set; }
 
     [ForeignKey(nameof(Customer))]
-    public int CustomerId { get; set; }
+    public Guid CustomerId { get; set; }
     public string CustomerName { get; set; } = "";
     public DateTime PostingDate { get; set; }
     public string Description { get; set; } = "";

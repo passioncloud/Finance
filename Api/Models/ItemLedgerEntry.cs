@@ -4,9 +4,8 @@ using Api.Models;
 
 namespace Api.Models;
 
-public class ItemLedgerEntry
+public class ItemLedgerEntry : Model
 {
-    public int Id { get; set; }
     public string DocumentType { get; set; }
     public string EntryType { get; set; }
     public string DocumentNo { get; set; }

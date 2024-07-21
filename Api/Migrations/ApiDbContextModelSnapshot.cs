@@ -100,71 +100,11 @@ namespace Api.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Models.ApiHeader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
-                    b.Property<string>("CustomerName")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
-
-                    b.Property<int>("DocumentType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ExternalDocumentNo")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
-
-                    b.Property<DateTime>("PostingDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("ApiHeaders");
-                });
-
             modelBuilder.Entity("Api.Models.Customer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -183,22 +123,20 @@ namespace Api.Migrations
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<int>("CustomerPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("CustomerPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<int>("GenBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("GeneralBusinessPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(255)")
                         .HasAnnotation("DefaultValue", "");
 
                     b.Property<string>("PhoneNo")
@@ -219,27 +157,26 @@ namespace Api.Migrations
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<int>("VATBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATBusinessPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerPostingGroupId");
 
-                    b.HasIndex("VATBusPostingGroupId");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("VATBusinessPostingGroupId");
 
                     b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Api.Models.CustomerLedgerEntry", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(9, 2)
@@ -286,12 +223,10 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<string>("CustomerName")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("CustomerNo")
+                    b.Property<string>("CustomerName")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
@@ -320,10 +255,9 @@ namespace Api.Migrations
                     b.Property<DateOnly>("DueDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("EntryNo")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
+                    b.Property<int>("EntryNo")
+                        .HasColumnType("int")
+                        .HasAnnotation("DefaultValue", 0);
 
                     b.Property<string>("ExternalDocumentNo")
                         .IsRequired()
@@ -366,37 +300,30 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Models.CustomerPostingGroup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<int>("ReceivablesAccountNo")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("ReceivablesAccountId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceivablesAccountNo");
+                    b.HasIndex("ReceivablesAccountId");
 
                     b.ToTable("CustomerPostingGroups");
                 });
 
             modelBuilder.Entity("Api.Models.GLAccount", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<int?>("AccountCategory")
                         .HasColumnType("int");
@@ -415,39 +342,41 @@ namespace Api.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasAnnotation("DefaultValue", false);
 
-                    b.Property<int>("GenBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("GenBusPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("GenPostingType")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("GenProdPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("IncomeOrBalance")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(255)")
                         .HasAnnotation("DefaultValue", "");
 
                     b.Property<string>("No")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(255)")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<int>("VATBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATBusPostingGroupId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int>("VATProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATProdPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("No")
+                        .IsUnique();
 
                     b.ToTable("GLAccounts");
                 });
@@ -463,9 +392,8 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("BalAccountNo")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("BalAccountId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("BalAccountType")
                         .HasColumnType("int");
@@ -501,20 +429,17 @@ namespace Api.Migrations
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<int>("GLAccountNo")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("GLAccountId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int>("GenBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("GenBusPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("GenPostingType")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("GenProdPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("JournalBatchName")
                         .IsRequired()
@@ -543,33 +468,30 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("VATBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATBusPostingGroupId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int>("VATProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATProdPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("EntryNo");
 
-                    b.HasIndex("GLAccountNo");
+                    b.HasIndex("EntryNo")
+                        .IsUnique();
+
+                    b.HasIndex("GLAccountId");
 
                     b.ToTable("GLEntries");
                 });
 
             modelBuilder.Entity("Api.Models.GenJournalLine", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                        .HasColumnType("char(36)");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccountNo")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("AccountType")
                         .HasColumnType("int");
@@ -596,23 +518,20 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("BalAccountNo")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("BalAccountId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("BalAccountType")
                         .HasColumnType("int");
 
-                    b.Property<int>("BalGenBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("BalGenBusPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("BalGenPostingType")
                         .HasColumnType("int");
 
-                    b.Property<int>("BalGenProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("BalGeneralProductPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("BalVATAmount")
                         .HasPrecision(9, 2)
@@ -629,18 +548,16 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("BalVATBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("BalVATBusPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("BalVATPercentage")
                         .HasPrecision(9, 2)
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("BalVATProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("BalVATProdPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("BalanceLCY")
                         .HasPrecision(9, 2)
@@ -687,25 +604,23 @@ namespace Api.Migrations
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<int>("GenBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
                     b.Property<int>("GenPostingType")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("GeneralBusinessPostingGroupId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("GeneralProductPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("JournalBatchName")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(255)")
                         .HasAnnotation("DefaultValue", "");
 
                     b.Property<string>("JournalTemplateName")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(255)")
                         .HasAnnotation("DefaultValue", "");
 
                     b.Property<int>("LineNo")
@@ -719,9 +634,8 @@ namespace Api.Migrations
                     b.Property<DateOnly>("PostingDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("PostingNoSeries")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("PostingNoSeries")
+                        .HasColumnType("char(36)");
 
                     b.Property<bool>("Prepayment")
                         .HasColumnType("tinyint(1)")
@@ -747,22 +661,20 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("VATBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATBusPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("VATPercentage")
                         .HasPrecision(9, 2)
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("VATProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATProdPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountNo");
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("BalVATBusPostingGroupId");
 
@@ -772,17 +684,17 @@ namespace Api.Migrations
 
                     b.HasIndex("VATProdPostingGroupId");
 
+                    b.HasIndex("JournalTemplateName", "JournalBatchName", "LineNo")
+                        .IsUnique();
+
                     b.ToTable("GenJournalLines");
                 });
 
             modelBuilder.Entity("Api.Models.Item", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("Cost")
                         .HasPrecision(9, 2)
@@ -822,9 +734,9 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Models.NoSeries", b =>
                 {
-                    b.Property<string>("No")
-                        .HasColumnType("varchar(255)")
-                        .HasAnnotation("DefaultValue", "");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("LastUsedNo")
                         .IsRequired()
@@ -841,35 +753,88 @@ namespace Api.Migrations
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.HasKey("No");
+                    b.HasKey("Id");
 
                     b.ToTable("NoSeries");
                 });
 
-            modelBuilder.Entity("Api.Models.VATBusinessPostingGroup", b =>
+            modelBuilder.Entity("Api.Models.SalesHeader", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                        .HasColumnType("char(36)");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasAnnotation("DefaultValue", "");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasAnnotation("DefaultValue", "");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
+                    b.Property<int>("DocumentType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExternalDocumentNo")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasAnnotation("DefaultValue", "");
+
+                    b.Property<DateTime>("PostingDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasAnnotation("DefaultValue", "");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("ApiHeaders");
+                });
+
+            modelBuilder.Entity("Api.Models.VATBusinessPostingGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasAnnotation("DefaultValue", "");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Description")
+                        .IsUnique();
 
                     b.ToTable("VATBusinessPostingGroups");
                 });
 
             modelBuilder.Entity("Api.Models.VATEntry", b =>
                 {
-                    b.Property<int>("EntryNo")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(9, 2)
@@ -885,9 +850,8 @@ namespace Api.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasAnnotation("DefaultValue", false);
 
-                    b.Property<int>("ClosedByEntryNo")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("ClosedByEntryNo")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateOnly>("DocumentDate")
                         .HasColumnType("date");
@@ -900,18 +864,20 @@ namespace Api.Migrations
                     b.Property<int>("DocumentType")
                         .HasColumnType("int");
 
+                    b.Property<int>("EntryNo")
+                        .HasColumnType("int")
+                        .HasAnnotation("DefaultValue", 0);
+
                     b.Property<string>("ExternalDocumentNo")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<int>("GenBusPostringGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("GenBusPostringGroupId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int>("GenProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("GenProdPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateOnly>("PostingDate")
                         .HasColumnType("date");
@@ -933,15 +899,13 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("VATBusPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATBusPostingGroupId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int>("VATProdPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATProdPostingGroupId")
+                        .HasColumnType("char(36)");
 
-                    b.HasKey("EntryNo");
+                    b.HasKey("Id");
 
                     b.HasIndex("VATBusPostingGroupId");
 
@@ -952,54 +916,46 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Models.VATPostingSetup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<int>("SalesVATAccountId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("SalesVATAccountId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int>("VATBusinessPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATBusinessPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("VATPercentage")
                         .HasPrecision(9, 2)
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("VATProductPostingGroupId")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("VATProductPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SalesVATAccountId");
 
-                    b.HasIndex("VATBusinessPostingGroupId");
-
                     b.HasIndex("VATProductPostingGroupId");
+
+                    b.HasIndex("VATBusinessPostingGroupId", "VATProductPostingGroupId")
+                        .IsUnique();
 
                     b.ToTable("VATPostingSetups");
                 });
 
             modelBuilder.Entity("Api.Models.VATProductPostingGroup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1168,17 +1124,6 @@ namespace Api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Api.Models.ApiHeader", b =>
-                {
-                    b.HasOne("Api.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("Api.Models.Customer", b =>
                 {
                     b.HasOne("Api.Models.CustomerPostingGroup", "CustomerPostingGroup")
@@ -1189,7 +1134,7 @@ namespace Api.Migrations
 
                     b.HasOne("Api.Models.VATBusinessPostingGroup", "VATBusinessPostingGroup")
                         .WithMany()
-                        .HasForeignKey("VATBusPostingGroupId")
+                        .HasForeignKey("VATBusinessPostingGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1202,7 +1147,7 @@ namespace Api.Migrations
                 {
                     b.HasOne("Api.Models.GLAccount", "ReceivablesGLAccount")
                         .WithMany()
-                        .HasForeignKey("ReceivablesAccountNo")
+                        .HasForeignKey("ReceivablesAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1213,7 +1158,7 @@ namespace Api.Migrations
                 {
                     b.HasOne("Api.Models.GLAccount", "GLAccount")
                         .WithMany()
-                        .HasForeignKey("GLAccountNo")
+                        .HasForeignKey("GLAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1224,7 +1169,7 @@ namespace Api.Migrations
                 {
                     b.HasOne("Api.Models.GLAccount", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountNo")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1261,6 +1206,17 @@ namespace Api.Migrations
                     b.Navigation("VATBusinessPostingGroup");
 
                     b.Navigation("VATProductPostingGroup");
+                });
+
+            modelBuilder.Entity("Api.Models.SalesHeader", b =>
+                {
+                    b.HasOne("Api.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Api.Models.VATEntry", b =>

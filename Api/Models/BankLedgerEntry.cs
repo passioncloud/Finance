@@ -10,7 +10,7 @@ public class BankLedgerEntry : Model
     public DateTime PostingDate { get; set; } = DateTime.Now.Date;
 
     [ForeignKey(nameof(Bank))]
-    public string BankNo { get; set; }
+    public Guid BankId { get; set; }
     public string BankName { get; set; }
     public decimal Amount { get; set; }
     public string Description { get; set; } = "";

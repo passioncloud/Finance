@@ -17,7 +17,7 @@ public class ApiInvoiceController(ApiDbContext apiDbContext) : ControllerBase
 {
 
     [HttpGet]
-    public IEnumerable<ApiHeader> GetApiInvoices(string search = "")
+    public IEnumerable<SalesHeader> GetApiInvoices(string search = "")
     {
         return apiDbContext.ApiHeaders
         .Where(c => 
@@ -38,9 +38,9 @@ public class ApiInvoiceController(ApiDbContext apiDbContext) : ControllerBase
     // }
 
     [HttpPost]
-    public async Task<ApiHeader> CreateApiInvoice(CreateApiInvoiceDto createApiInvoiceDto)
+    public async Task<SalesHeader> CreateApiInvoice(CreateApiInvoiceDto createApiInvoiceDto)
     {
-        ApiHeader salesHeader = createApiInvoiceDto.CreateApiInvoice();
+        SalesHeader salesHeader = createApiInvoiceDto.CreateApiInvoice();
         apiDbContext.ApiHeaders.Add(salesHeader);
         await apiDbContext.SaveChangesAsync();
         return salesHeader;

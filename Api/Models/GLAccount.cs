@@ -18,11 +18,11 @@ namespace Api.Models
         public bool Blocked { get; set; }
         public bool DirectPosting { get; set; }
         public GLGenPostingType GenPostingType { get; set; }
-        public int GenBusPostingGroupId { get; set; } 
-        public int GenProdPostingGroupId { get; set; } 
+        public Guid GenBusPostingGroupId { get; set; } 
+        public Guid GenProdPostingGroupId { get; set; } 
 
-        public int VATBusPostingGroupId { get; set; } 
-        public int VATProdPostingGroupId { get; set; } 
+        public Guid VATBusPostingGroupId { get; set; } 
+        public Guid VATProdPostingGroupId { get; set; } 
 
     }
 }

@@ -9,8 +9,8 @@ namespace Api.Models
     public class CustomerLedgerEntry : Model
     {
 
-        public string EntryNo { get; set; } = "";
-        public string CustomerNo { get; set; } = "";
+        public int EntryNo { get; set; }
+        public Guid CustomerId { get; set; } 
         public DateOnly PostingDate { get; set; }
         public GenJournalDocumentType DocumentType { get; set; }
         public string DocumentNo { get; set; } = "";

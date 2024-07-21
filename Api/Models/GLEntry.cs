@@ -13,7 +13,7 @@ public class GLEntry
     public int EntryNo { get; set; }
 
     [ForeignKey(nameof(GLAccount))]
-    public int GLAccountNo { get; set; }
+    public Guid GLAccountId { get; set; }
 
 
     public virtual GLAccount? GLAccount { get; set; }
@@ -25,7 +25,7 @@ public class GLEntry
 
     public GenJournalAccountType BalAccountType { get; set; }
 
-    public int BalAccountNo { get; set; }
+    public Guid BalAccountId { get; set; }
 
     public decimal Amount { get; set; }
     public string UserId { get; set; } = "";
@@ -33,15 +33,15 @@ public class GLEntry
     public decimal VATAmount { get; set; }
     public string JournalBatchName { get; set; } = "";
     public GLGenPostingType GenPostingType { get; set; }
-    public int GenBusPostingGroupId { get; set; }
-    public int GenProdPostingGroupId { get; set; }
+    public Guid GenBusPostingGroupId { get; set; }
+    public Guid GenProdPostingGroupId { get; set; }
     public decimal DebitAmount { get; set; }
     public decimal CreditAmount { get; set; }
     public DateOnly DocumentDate { get; set; }
     public string ExternalDocumentNo { get; set; } = "";
 
-    public int VATBusPostingGroupId { get; set; }
-    public int VATProdPostingGroupId { get; set; }
+    public Guid VATBusPostingGroupId { get; set; }
+    public Guid VATProdPostingGroupId { get; set; }
 
     public bool Reversed { get; set; }
 

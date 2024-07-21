@@ -16,11 +16,11 @@ public class Customer : Model
   public string TIN { get; set; }
 
   [ForeignKey(nameof(CustomerPostingGroup))]
-  public int CustomerPostingGroupId{ get; set; }
+  public Guid CustomerPostingGroupId{ get; set; }
   public bool Blocked { get; set; }
-  public int GenBusPostingGroupId { get; set; } 
+  public Guid GeneralBusinessPostingGroupId { get; set; } 
   [ForeignKey(nameof(VATBusinessPostingGroup))]
-  public int VATBusPostingGroupId { get; set; } 
+  public Guid VATBusinessPostingGroupId { get; set; } 
   public string CreatedBy { get; set; }
   public DateTime CreatedAt { get; set; }
   public string UpdatedBy { get; set; }

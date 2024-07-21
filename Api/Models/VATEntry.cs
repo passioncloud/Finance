@@ -4,13 +4,11 @@ using Api.Enums;
 
 namespace Api.Models
 {
-    public class VATEntry
+    public class VATEntry : Model
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Key]
         public int EntryNo { get; set; }
-        public int GenBusPostringGroupId { get; set; } 
-        public int GenProdPostingGroupId { get; set; } 
+        public Guid GenBusPostringGroupId { get; set; } 
+        public Guid GenProdPostingGroupId { get; set; } 
 
         public DateOnly PostingDate { get; set; }
         public string DocumentNo { get; set; } = "";
@@ -24,13 +22,13 @@ namespace Api.Models
         public string UserId { get; set; } = "";
 
         [ForeignKey(nameof(ClosedByVATEntry))]
-        public int ClosedByEntryNo { get; set; }
+        public Guid ClosedByEntryNo { get; set; }
         public bool Closed { get; set; }
         public string ExternalDocumentNo { get; set; } = "";
         [ForeignKey(nameof(VATBusinessPostingGroup))]
-        public int VATBusPostingGroupId { get; set; } 
+        public Guid VATBusPostingGroupId { get; set; } 
         [ForeignKey(nameof(VATProductPostingGroup))]
-        public int VATProdPostingGroupId { get; set; } 
+        public Guid VATProdPostingGroupId { get; set; } 
         public decimal VATBaseDiscountPercentage { get; set; }
         public DateOnly DocumentDate { get; set; }
         public bool Reversed { get; set; }

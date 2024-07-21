@@ -6,5 +6,5 @@ namespace Api.Models;
 public class Model  
 {
     [Key]
-    public int Id { get;set; }
+    public Guid Id { get;set; }
 }

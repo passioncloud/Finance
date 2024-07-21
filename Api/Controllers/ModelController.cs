@@ -11,9 +11,16 @@ namespace Api.Controllers;
 public class ModelController<TModel>(ApiDbContext apiDbContext) : ControllerBase where TModel : Model
 {
     [HttpGet]
-    public IEnumerable<TModel> Get()
+    public IEnumerable<TModel> GetList()
     {
         return apiDbContext.GetDbSet<TModel>();
+    }
+
+      [HttpGet]
+      [Route("{Id}")]
+    public async Task<TModel> GetModel(Guid Id)
+    {
+        return await apiDbContext.GetDbSet<TModel>().FindAsync(Id);
     }
 
 
@@ -29,7 +36,7 @@ public class ModelController<TModel>(ApiDbContext apiDbContext) : ControllerBase
 
     [HttpPut]
     [Route("{Id}")]
-    public async Task<TModel> PutModel(int Id, TModel model)
+    public async Task<TModel> PutModel(Guid Id, TModel model)
     {
         DbSet<TModel> dbSet = apiDbContext.GetDbSet<TModel>();
         TModel m = await dbSet.FindAsync(Id);
@@ -42,10 +49,10 @@ public class ModelController<TModel>(ApiDbContext apiDbContext) : ControllerBase
 
     [HttpDelete]
     [Route("{Id}")]
-    public async Task Delete(int Id)
+    public async Task Delete(Guid Id)
     {
         DbSet<TModel> dbSet = apiDbContext.GetDbSet<TModel>();
-        TModel m = await dbSet.FindAsync(Id);
+        TModel m = (await dbSet.FindAsync(Id))!;
         dbSet.Remove(m);
         await apiDbContext.SaveChangesAsync();
     }

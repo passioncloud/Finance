@@ -11,7 +11,7 @@ namespace Api.Services
         {
             GenJournalLine genJournalLine2 = Rec;
             Rec.AccountType = genJournalLine2.BalAccountType;
-            Rec.AccountNo = genJournalLine2.BalAccountNo ;
+            Rec.AccountId = genJournalLine2.BalAccountId ;
             Rec.VATPercentage = genJournalLine2.BalVATPercentage;
             Rec.VATAmount = genJournalLine2.VATAmount;
             Rec.GenPostingType = genJournalLine2.BalGenPostingType;
@@ -23,7 +23,7 @@ namespace Api.Services
             Rec.VATBaseAmountLCY = genJournalLine2.BalVATBaseAmountLCY;
 
             Rec.BalAccountType = genJournalLine2.AccountType;
-            Rec.BalAccountNo = genJournalLine2.AccountNo;
+            Rec.BalAccountId = genJournalLine2.AccountId;
             Rec.BalVATPercentage = genJournalLine2.VATPercentage;
             Rec.BalVATAmount = genJournalLine2.VATAmount;
             Rec.BalGenPostingType = genJournalLine2.GenPostingType;

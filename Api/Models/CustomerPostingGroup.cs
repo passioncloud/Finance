@@ -10,7 +10,7 @@ namespace Api.Models
     {
 
         [ForeignKey(nameof(ReceivablesGLAccount))]
-        public int ReceivablesAccountNo { get;set;}
+        public Guid ReceivablesAccountId { get;set;}
 
         public string Description { get;set; } = "";
 

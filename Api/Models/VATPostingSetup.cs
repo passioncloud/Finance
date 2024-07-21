@@ -11,13 +11,13 @@ namespace Api.Models
     public class VATPostingSetup : Model
     {
         [ForeignKey(nameof(VATBusinessPostingGroup))]
-        public int VATBusinessPostingGroupId { get; set; }
+        public Guid VATBusinessPostingGroupId { get; set; }
         [ForeignKey(nameof(VATProductPostingGroup))]
-        public int VATProductPostingGroupId { get; set; }
+        public Guid VATProductPostingGroupId { get; set; }
         public decimal VATPercentage { get; set; }
 
         [ForeignKey(nameof(SalesVATGLAccount))]
-        public int SalesVATAccountId { get; set; }
+        public Guid SalesVATAccountId { get; set; }
         public string Description { get; set; } = "";
 
 
@@ -26,7 +26,7 @@ namespace Api.Models
 
         public virtual GLAccount? SalesVATGLAccount { get; set; }
 
-        public int GetSalesAccount()
+        public Guid GetSalesAccount()
         {
             // Check.NotEmptyNotNull(SalesVATAccountId);
             return SalesVATAccountId;

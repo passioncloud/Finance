@@ -13,7 +13,7 @@ namespace Api.Models;
         public GenJournalAccountType AccountType { get; set; }
 
         [ForeignKey(nameof(Account))]
-        public int AccountNo { get; set; } 
+        public Guid AccountId { get; set; } 
         public GLAccount? Account { get; set; }
         public DateOnly PostingDate { get; set; }
         public GenJournalDocumentType DocumentType { get; set; }
@@ -22,7 +22,7 @@ namespace Api.Models;
         public decimal VATPercentage { get; set; }
         
         public GenJournalAccountType BalAccountType { get; set; }
-        public int BalAccountNo { get; set; }
+        public Guid BalAccountId { get; set; }
         public string? CurrencyCode { get; set; }
         public decimal Amount { get; set; }
         public decimal DebitAmount { get; set; }
@@ -37,11 +37,11 @@ namespace Api.Models;
         public decimal VATAmount { get; set; }
         public decimal AppliesToId { get; set; }
         public GLGenPostingType GenPostingType { get; set; }
-        public int GeneralBusinessPostingGroupId { get; set; }
-        public int GeneralProductPostingGroupId { get; set; }
+        public Guid GeneralBusinessPostingGroupId { get; set; }
+        public Guid GeneralProductPostingGroupId { get; set; }
         public GLGenPostingType BalGenPostingType { get; set; }
-        public int BalGenBusPostingGroupId { get; set; }
-        public int BalGeneralProductPostingGroupId { get; set; }
+        public Guid BalGenBusPostingGroupId { get; set; }
+        public Guid BalGeneralProductPostingGroupId { get; set; }
         public decimal BalVATPercentage { get; set; }
         public decimal BalVATAmount { get; set; }
         public decimal VATBaseAmount { get; set; }
@@ -50,19 +50,19 @@ namespace Api.Models;
         public decimal BalVATBaseAmountLCY { get; set; }
         public DateOnly? DocumentDate { get; set; }
         public string? ExternalDocumentNo { get; set; }
-        public int PostingNoSeries { get; set; }
+        public Guid PostingNoSeries { get; set; }
 
         [ForeignKey(nameof(VATBusinessPostingGroup))]
-        public int VATBusPostingGroupId { get; set; } 
+        public Guid VATBusPostingGroupId { get; set; } 
 
         [ForeignKey(nameof(VATProductPostingGroup))]
-        public int VATProdPostingGroupId { get; set; } 
+        public Guid VATProdPostingGroupId { get; set; } 
 
         [ForeignKey(nameof(BalVATBusinessPostingGroup))]
-        public int BalVATBusPostingGroupId { get; set; }
+        public Guid BalVATBusPostingGroupId { get; set; }
 
         [ForeignKey(nameof(BalVATProductPostingGroup))]
-        public int BalVATProdPostingGroupId { get; set; }
+        public Guid BalVATProdPostingGroupId { get; set; }
         public bool Prepayment { get; set; }
         public string? PaymentMethodCode { get; set; }
 
