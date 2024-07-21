@@ -19,15 +19,15 @@ namespace Api.Services
         private readonly ExchangeAccGLJournalLine exchangeAccGLJournalLine = new();
         private GenJournalDocumentType? lastDocType;
         private string? lastDocNo;
-        private DateOnly? lastDate;
+        private DateTime? lastDate;
         private int glEntryNo = 0;
         private int nextEntryNo = 0;
         private decimal currentBalance = 0;
         private int nextVATEntryNo = 0;
 
 
-        private GenJournalLine _genJournalLine = new GenJournalLine();
-        public int RunWithoutCheck(GenJournalLine genJournalLine)
+        private GeneralJournalLine _genJournalLine = new GeneralJournalLine();
+        public int RunWithoutCheck(GeneralJournalLine genJournalLine)
         {
             _genJournalLine = genJournalLine;
             Code();
@@ -84,7 +84,7 @@ namespace Api.Services
         {
             nextEntryNo = postLineUtils.GetNextGLEntryNo();
         }
-        private void InitLastDocDate(GenJournalLine journalLine)
+        private void InitLastDocDate(GeneralJournalLine journalLine)
         {
             lastDocType = journalLine.DocumentType;
             lastDocNo = journalLine.DocumentNo;
@@ -130,9 +130,13 @@ namespace Api.Services
         private void PostGLAcc()
         {
             GLAccount glAccount = postLineUtils.GetGLAccountById(_genJournalLine.AccountId);
+            if (_genJournalLine.AmountLCY == 0) 
+            {
+                _genJournalLine.AmountLCY = _genJournalLine.Amount;
+            }
             GLEntry glEntry = InitGLEntry(glAccount.Id, _genJournalLine.AmountLCY);
             CheckGLAccDirectPosting();
-            glEntry.GenPostingType = _genJournalLine.GenPostingType;
+            glEntry.GenPostingType = _genJournalLine.GeneralPostingType;
             glEntry.BalAccountType = _genJournalLine.BalAccountType;
             glEntry.BalAccountId = _genJournalLine.BalAccountId ;
             // store entry no to class variable for return 
@@ -155,21 +159,21 @@ namespace Api.Services
 
         private void CheckGLAccDirectPosting()
         {
-            GLAccount glAccount = postLineUtils.GetGLAccountById(_genJournalLine.Id);
+            GLAccount glAccount = postLineUtils.GetGLAccountById(_genJournalLine.AccountId);
             MyCheck.MustEqual(glAccount.DirectPosting, true);
         }
 
-        private GLEntry InitGLEntry(Guid glAccountNo, decimal amount)
+        private GLEntry InitGLEntry(Guid glAccountId, decimal amount)
         {
-            GLAccount glAccount = postLineUtils.GetGLAccountById(glAccountNo);
-            // Check.NotEmptyNotNull(glAccountNo);
+            GLAccount glAccount = postLineUtils.GetGLAccountById(glAccountId);
+            Check.NotEmptyNotNull(glAccountId.ToString());
             MyCheck.MustEqual(glAccount.Blocked, false);
-            //   MyCheck.MustEqual(glAccount.AccountType, GLAccountType.Posting);
+              MyCheck.MustEqual(glAccount.AccountType, GLAccountType.Posting);
 
             GLEntry glEntry = new GLEntry();
             glEntry.CopyFromGenJnlLine(_genJournalLine);
             glEntry.EntryNo = nextEntryNo;
-            glEntry.GLAccountId = glAccountNo;
+            glEntry.GLAccountId = glAccountId;
             glEntry.Amount = amount;
             return glEntry;
         }
@@ -225,9 +229,9 @@ namespace Api.Services
             if (glEntryVATAmount == 0) return;
             VATPostingSetup vatPostingSetup = postLineUtils.GetVATPostingSetup(_genJournalLine);
 
-            switch (_genJournalLine.GenPostingType)
+            switch (_genJournalLine.GeneralPostingType)
             {
-                case GLGenPostingType.Sale:
+                case GLGeneralPostingType.Sale:
                     {
                         CreateGLEntry(vatPostingSetup.GetSalesAccount(), glEntryVATAmount);
                         break;

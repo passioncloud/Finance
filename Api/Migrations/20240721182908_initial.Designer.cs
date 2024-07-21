@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20240721122101_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240721182908_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -291,10 +291,8 @@ namespace Api.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasAnnotation("DefaultValue", false);
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -386,9 +384,9 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Models.GLEntry", b =>
                 {
-                    b.Property<int>("EntryNo")
-                        .HasColumnType("int")
-                        .HasAnnotation("DefaultValue", 0);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(9, 2)
@@ -416,8 +414,8 @@ namespace Api.Migrations
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<DateOnly>("DocumentDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DocumentDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("DocumentNo")
                         .IsRequired()
@@ -427,6 +425,10 @@ namespace Api.Migrations
                     b.Property<int>("DocumentType")
                         .HasColumnType("int");
 
+                    b.Property<int>("EntryNo")
+                        .HasColumnType("int")
+                        .HasAnnotation("DefaultValue", 0);
+
                     b.Property<string>("ExternalDocumentNo")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -435,22 +437,20 @@ namespace Api.Migrations
                     b.Property<Guid>("GLAccountId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("GenBusPostingGroupId")
-                        .HasColumnType("char(36)");
-
                     b.Property<int>("GenPostingType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("GenProdPostingGroupId")
+                    b.Property<Guid>("GeneralBusinessPostingGroupId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("JournalBatchName")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
+                    b.Property<Guid>("GeneralJournalBatchId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<DateOnly>("PostingDate")
-                        .HasColumnType("date");
+                    b.Property<Guid>("GeneralProductPostingGroupId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("PostingDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<decimal>("Quantity")
                         .HasPrecision(9, 2)
@@ -461,23 +461,21 @@ namespace Api.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasAnnotation("DefaultValue", false);
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("VATAmount")
                         .HasPrecision(9, 2)
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<Guid>("VATBusPostingGroupId")
+                    b.Property<Guid>("VATBusinessPostingGroupId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("VATProdPostingGroupId")
+                    b.Property<Guid>("VATProductPostingGroupId")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("EntryNo");
+                    b.HasKey("Id");
 
                     b.HasIndex("EntryNo")
                         .IsUnique();
@@ -487,7 +485,50 @@ namespace Api.Migrations
                     b.ToTable("GLEntries");
                 });
 
-            modelBuilder.Entity("Api.Models.GenJournalLine", b =>
+            modelBuilder.Entity("Api.Models.GeneralBusinessPostingGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasAnnotation("DefaultValue", "");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Description")
+                        .IsUnique();
+
+                    b.ToTable("GeneralBusinessPostingGroups");
+                });
+
+            modelBuilder.Entity("Api.Models.GeneralJournalBatch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasAnnotation("DefaultValue", "");
+
+                    b.Property<Guid>("GeneralJournalTemplateId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Description")
+                        .IsUnique();
+
+                    b.HasIndex("GeneralJournalTemplateId");
+
+                    b.ToTable("GeneralJournalBatches");
+                });
+
+            modelBuilder.Entity("Api.Models.GeneralJournalLine", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -527,10 +568,10 @@ namespace Api.Migrations
                     b.Property<int>("BalAccountType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("BalGenBusPostingGroupId")
+                    b.Property<Guid>("BalGeneralBusinessPostingGroupId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("BalGenPostingType")
+                    b.Property<int>("BalGeneralPostingType")
                         .HasColumnType("int");
 
                     b.Property<Guid>("BalGeneralProductPostingGroupId")
@@ -551,7 +592,7 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<Guid>("BalVATBusPostingGroupId")
+                    b.Property<Guid>("BalVATBusinessPostingGroupId")
                         .HasColumnType("char(36)");
 
                     b.Property<decimal>("BalVATPercentage")
@@ -559,7 +600,7 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<Guid>("BalVATProdPostingGroupId")
+                    b.Property<Guid>("BalVATProductPostingGroupId")
                         .HasColumnType("char(36)");
 
                     b.Property<decimal>("BalanceLCY")
@@ -587,44 +628,43 @@ namespace Api.Migrations
                         .HasAnnotation("DefaultValue", 0);
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<DateOnly?>("DocumentDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DocumentDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("DocumentNo")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
                     b.Property<int>("DocumentType")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly?>("DueDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("ExternalDocumentNo")
+                        .IsRequired()
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
-
-                    b.Property<int>("GenPostingType")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("GeneralBusinessPostingGroupId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("GeneralProductPostingGroupId")
+                    b.Property<Guid>("GeneralJournalBatchId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("JournalBatchName")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasAnnotation("DefaultValue", "");
+                    b.Property<Guid>("GeneralJournalTemplateId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<string>("JournalTemplateName")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
-                        .HasAnnotation("DefaultValue", "");
+                    b.Property<int>("GeneralPostingType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("GeneralProductPostingGroupId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("LineNo")
                         .HasColumnType("int")
@@ -634,8 +674,8 @@ namespace Api.Migrations
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<DateOnly>("PostingDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("PostingDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("PostingNoSeries")
                         .HasColumnType("char(36)");
@@ -664,7 +704,7 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<Guid>("VATBusPostingGroupId")
+                    b.Property<Guid>("VATBusinessPostingGroupId")
                         .HasColumnType("char(36)");
 
                     b.Property<decimal>("VATPercentage")
@@ -672,25 +712,105 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<Guid>("VATProdPostingGroupId")
+                    b.Property<Guid>("VATProductPostingGroupId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("BalVATBusPostingGroupId");
+                    b.HasIndex("BalGeneralBusinessPostingGroupId");
 
-                    b.HasIndex("BalVATProdPostingGroupId");
+                    b.HasIndex("BalGeneralProductPostingGroupId");
 
-                    b.HasIndex("VATBusPostingGroupId");
+                    b.HasIndex("BalVATBusinessPostingGroupId");
 
-                    b.HasIndex("VATProdPostingGroupId");
+                    b.HasIndex("BalVATProductPostingGroupId");
 
-                    b.HasIndex("JournalTemplateName", "JournalBatchName", "LineNo")
+                    b.HasIndex("GeneralBusinessPostingGroupId");
+
+                    b.HasIndex("GeneralJournalBatchId");
+
+                    b.HasIndex("GeneralProductPostingGroupId");
+
+                    b.HasIndex("VATBusinessPostingGroupId");
+
+                    b.HasIndex("VATProductPostingGroupId");
+
+                    b.HasIndex("GeneralJournalTemplateId", "GeneralJournalBatchId", "LineNo")
                         .IsUnique();
 
                     b.ToTable("GenJournalLines");
+                });
+
+            modelBuilder.Entity("Api.Models.GeneralJournalTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasAnnotation("DefaultValue", "");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Description")
+                        .IsUnique();
+
+                    b.ToTable("GeneralJournalTemplates");
+                });
+
+            modelBuilder.Entity("Api.Models.GeneralPostingSetup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasAnnotation("DefaultValue", "");
+
+                    b.Property<Guid>("SalesGLAccountId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("VATBusinessPostingGroupId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("VATProductPostingGroupId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SalesGLAccountId");
+
+                    b.HasIndex("VATProductPostingGroupId");
+
+                    b.HasIndex("VATBusinessPostingGroupId", "VATProductPostingGroupId")
+                        .IsUnique();
+
+                    b.ToTable("GeneralPostingSetups");
+                });
+
+            modelBuilder.Entity("Api.Models.GeneralProductPostingGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasAnnotation("DefaultValue", "");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Description")
+                        .IsUnique();
+
+                    b.ToTable("GeneralProductPostingGroups");
                 });
 
             modelBuilder.Entity("Api.Models.Item", b =>
@@ -811,7 +931,7 @@ namespace Api.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("ApiHeaders");
+                    b.ToTable("SalesHeaders");
                 });
 
             modelBuilder.Entity("Api.Models.VATBusinessPostingGroup", b =>
@@ -856,8 +976,8 @@ namespace Api.Migrations
                     b.Property<Guid>("ClosedByEntryNo")
                         .HasColumnType("char(36)");
 
-                    b.Property<DateOnly>("DocumentDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DocumentDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("DocumentNo")
                         .IsRequired()
@@ -876,14 +996,14 @@ namespace Api.Migrations
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
-                    b.Property<Guid>("GenBusPostringGroupId")
+                    b.Property<Guid>("GeneralBusinessPostringGroupId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("GenProdPostingGroupId")
+                    b.Property<Guid>("GeneralProductPostingGroupId")
                         .HasColumnType("char(36)");
 
-                    b.Property<DateOnly>("PostingDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("PostingDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("Reversed")
                         .HasColumnType("tinyint(1)")
@@ -892,10 +1012,8 @@ namespace Api.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasAnnotation("DefaultValue", "");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("VATBaseDiscountPercentage")
                         .HasPrecision(9, 2)
@@ -909,6 +1027,9 @@ namespace Api.Migrations
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EntryNo")
+                        .IsUnique();
 
                     b.HasIndex("VATBusPostingGroupId");
 
@@ -1168,7 +1289,18 @@ namespace Api.Migrations
                     b.Navigation("GLAccount");
                 });
 
-            modelBuilder.Entity("Api.Models.GenJournalLine", b =>
+            modelBuilder.Entity("Api.Models.GeneralJournalBatch", b =>
+                {
+                    b.HasOne("Api.Models.GeneralJournalTemplate", "GeneralJournalTemplate")
+                        .WithMany()
+                        .HasForeignKey("GeneralJournalTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GeneralJournalTemplate");
+                });
+
+            modelBuilder.Entity("Api.Models.GeneralJournalLine", b =>
                 {
                     b.HasOne("Api.Models.GLAccount", "Account")
                         .WithMany()
@@ -1176,35 +1308,110 @@ namespace Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Api.Models.GeneralBusinessPostingGroup", "BalGeneralBusinessPostingGroup")
+                        .WithMany()
+                        .HasForeignKey("BalGeneralBusinessPostingGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.GeneralProductPostingGroup", "BalGeneralProductPostingGroup")
+                        .WithMany()
+                        .HasForeignKey("BalGeneralProductPostingGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Api.Models.VATBusinessPostingGroup", "BalVATBusinessPostingGroup")
                         .WithMany()
-                        .HasForeignKey("BalVATBusPostingGroupId")
+                        .HasForeignKey("BalVATBusinessPostingGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Api.Models.VATProductPostingGroup", "BalVATProductPostingGroup")
                         .WithMany()
-                        .HasForeignKey("BalVATProdPostingGroupId")
+                        .HasForeignKey("BalVATProductPostingGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.GeneralBusinessPostingGroup", "GeneralBusinessPostingGroup")
+                        .WithMany()
+                        .HasForeignKey("GeneralBusinessPostingGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.GeneralJournalBatch", "GeneralJournalBatch")
+                        .WithMany()
+                        .HasForeignKey("GeneralJournalBatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.GeneralJournalTemplate", "GeneralJournalTemplate")
+                        .WithMany()
+                        .HasForeignKey("GeneralJournalTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.GeneralProductPostingGroup", "GeneralProductPostingGroup")
+                        .WithMany()
+                        .HasForeignKey("GeneralProductPostingGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Api.Models.VATBusinessPostingGroup", "VATBusinessPostingGroup")
                         .WithMany()
-                        .HasForeignKey("VATBusPostingGroupId")
+                        .HasForeignKey("VATBusinessPostingGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Api.Models.VATProductPostingGroup", "VATProductPostingGroup")
                         .WithMany()
-                        .HasForeignKey("VATProdPostingGroupId")
+                        .HasForeignKey("VATProductPostingGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Account");
 
+                    b.Navigation("BalGeneralBusinessPostingGroup");
+
+                    b.Navigation("BalGeneralProductPostingGroup");
+
                     b.Navigation("BalVATBusinessPostingGroup");
 
                     b.Navigation("BalVATProductPostingGroup");
+
+                    b.Navigation("GeneralBusinessPostingGroup");
+
+                    b.Navigation("GeneralJournalBatch");
+
+                    b.Navigation("GeneralJournalTemplate");
+
+                    b.Navigation("GeneralProductPostingGroup");
+
+                    b.Navigation("VATBusinessPostingGroup");
+
+                    b.Navigation("VATProductPostingGroup");
+                });
+
+            modelBuilder.Entity("Api.Models.GeneralPostingSetup", b =>
+                {
+                    b.HasOne("Api.Models.GLAccount", "SalesGLAccount")
+                        .WithMany()
+                        .HasForeignKey("SalesGLAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.VATBusinessPostingGroup", "VATBusinessPostingGroup")
+                        .WithMany()
+                        .HasForeignKey("VATBusinessPostingGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.VATProductPostingGroup", "VATProductPostingGroup")
+                        .WithMany()
+                        .HasForeignKey("VATProductPostingGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SalesGLAccount");
 
                     b.Navigation("VATBusinessPostingGroup");
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Models
 {
     [Index(nameof(Description), IsUnique = true)]
-    public class GeneralBusinessPostingGroup : Model
+    public class VATBusinessPostingGroup : Model
     {
         public string Description { get; set; } = "";
     }

@@ -17,7 +17,7 @@ namespace Api.Models
         public GLDebitOrCredit DebitOrCredit { get; set; }
         public bool Blocked { get; set; }
         public bool DirectPosting { get; set; }
-        public GLGenPostingType GenPostingType { get; set; }
+        public GLGeneralPostingType GenPostingType { get; set; }
         public Guid GenBusPostingGroupId { get; set; } 
         public Guid GenProdPostingGroupId { get; set; } 
 

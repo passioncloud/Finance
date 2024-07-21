@@ -15,22 +15,29 @@ namespace Api.Services
         public int GetNextVATEntryNo()
         {
             VATEntry? lastGLEntry = apiDbContext.VATEntries.OrderBy(g => g.EntryNo).LastOrDefault();
-             return 1 + (lastGLEntry?.EntryNo ?? 0);
+            return 1 + (lastGLEntry?.EntryNo ?? 0);
         }
 
         public GLAccount GetGLAccountById(Guid Id)
         {
-            return apiDbContext.GLAccounts.Find(Id);
+            Console.WriteLine($"GetGLAccountById {Id}");
+            GLAccount? result = apiDbContext.GLAccounts.Find(Id) ?? throw new Exception($"Failed to find GL Account with Id {Id}");
+            return result;
         }
 
-        public VATPostingSetup GetVATPostingSetup(Guid VATBusPostingGroup, Guid VATProdPostingGroup)
+        public VATPostingSetup GetVATPostingSetup(Guid VATBusinessPostingGroupId, Guid VATProductPostingGroupId)
         {
-            return apiDbContext.VATPostingSetups.First(v => v.VATBusinessPostingGroupId == VATBusPostingGroup && v.VATProductPostingGroupId == VATProdPostingGroup);
+            return apiDbContext.VATPostingSetups
+                .FirstOrDefault(v => v.VATBusinessPostingGroupId == VATBusinessPostingGroupId && v.VATProductPostingGroupId == VATProductPostingGroupId)
+                ?? throw new Exception($"Failed to find VATPostingSetup with VAT Business Posting Group Id {VATBusinessPostingGroupId} and VAT Product Posting Group Id {VATProductPostingGroupId}");
         }
 
-        public VATPostingSetup GetVATPostingSetup(GenJournalLine genJournalLine)
+        public VATPostingSetup GetVATPostingSetup(GeneralJournalLine genJournalLine)
         {
-            return apiDbContext.VATPostingSetups.First(v => v.VATBusinessPostingGroupId == genJournalLine.VATBusPostingGroupId && v.VATProductPostingGroupId == genJournalLine.VATProdPostingGroupId);
+            return apiDbContext.VATPostingSetups
+            .FirstOrDefault(v => v.VATBusinessPostingGroupId == genJournalLine.VATBusinessPostingGroupId && v.VATProductPostingGroupId == genJournalLine.VATProductPostingGroupId)
+                 ?? throw new Exception($"Failed to find VATPostingSetup with VAT Business Posting Group Id {genJournalLine.VATBusinessPostingGroupId} and VAT Product Posting Group Id {genJournalLine.VATProductPostingGroupId}");
+
         }
     }
 }

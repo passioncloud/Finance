@@ -6,58 +6,62 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Models;
 
 [Index(nameof(EntryNo), IsUnique = true)]
-public class GLEntry
+public class GLEntry : Model
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    [Key]
     public int EntryNo { get; set; }
 
     [ForeignKey(nameof(GLAccount))]
     public Guid GLAccountId { get; set; }
 
 
-    public virtual GLAccount? GLAccount { get; set; }
-
-    public DateOnly PostingDate { get; set; }
+    public DateTime PostingDate { get; set; }
     public GenJournalDocumentType DocumentType { get; set; }
     public string DocumentNo { get; set; } = "";
     public string Description { get; set; } = "";
 
     public GenJournalAccountType BalAccountType { get; set; }
 
+
     public Guid BalAccountId { get; set; }
 
     public decimal Amount { get; set; }
-    public string UserId { get; set; } = "";
+    public Guid UserId { get; set; } 
     public decimal Quantity { get; set; }
     public decimal VATAmount { get; set; }
-    public string JournalBatchName { get; set; } = "";
-    public GLGenPostingType GenPostingType { get; set; }
-    public Guid GenBusPostingGroupId { get; set; }
-    public Guid GenProdPostingGroupId { get; set; }
+    [ForeignKey(nameof(GeneralJournalBatch))]
+    public Guid GeneralJournalBatchId { get; set; }
+    public GLGeneralPostingType GenPostingType { get; set; }
+    [ForeignKey(nameof(GeneralBusinessPostingGroup))]
+    public Guid GeneralBusinessPostingGroupId { get; set; }
+    [ForeignKey(nameof(GeneralProductPostingGroup))]
+    public Guid GeneralProductPostingGroupId { get; set; }
     public decimal DebitAmount { get; set; }
     public decimal CreditAmount { get; set; }
-    public DateOnly DocumentDate { get; set; }
+    public DateTime DocumentDate { get; set; }
     public string ExternalDocumentNo { get; set; } = "";
-
-    public Guid VATBusPostingGroupId { get; set; }
-    public Guid VATProdPostingGroupId { get; set; }
+    [ForeignKey(nameof(VATBusinessPostingGroup))]
+    public Guid VATBusinessPostingGroupId { get; set; }
+    [ForeignKey(nameof(VATProductPostingGroup))]
+    public Guid VATProductPostingGroupId { get; set; }
 
     public bool Reversed { get; set; }
 
 
 
-    public void CopyFromGenJnlLine(GenJournalLine genJournalLine)
+    public virtual GLAccount? GLAccount { get; set; }
+
+
+
+    public void CopyFromGenJnlLine(GeneralJournalLine genJournalLine)
     {
         PostingDate = genJournalLine.PostingDate;
-        DocumentDate = genJournalLine.DocumentDate ?? genJournalLine.PostingDate;
+        DocumentDate = genJournalLine.DocumentDate;
         DocumentType = genJournalLine.DocumentType;
         DocumentNo = genJournalLine.DocumentNo ?? "";
         ExternalDocumentNo = genJournalLine.ExternalDocumentNo ?? "";
         Description = genJournalLine.Description ?? "";
         Quantity = genJournalLine.Quantity;
-        JournalBatchName = genJournalLine.JournalBatchName;
-        UserId = "TEST USER";
+        GeneralJournalBatchId = genJournalLine.GeneralJournalBatchId;
     }
 
     public void UpdateDebitCredit()
@@ -74,13 +78,13 @@ public class GLEntry
         }
     }
 
-    public void CopyPostingGroupsFromGenJnlLine(GenJournalLine genJournalLine)
+    public void CopyPostingGroupsFromGenJnlLine(GeneralJournalLine genJournalLine)
     {
-        GenPostingType = genJournalLine.GenPostingType;
-        GenBusPostingGroupId = genJournalLine.GeneralBusinessPostingGroupId;
-        GenProdPostingGroupId = genJournalLine.GeneralProductPostingGroupId;
-        VATBusPostingGroupId = genJournalLine.VATBusPostingGroupId;
-        VATProdPostingGroupId = genJournalLine.VATProdPostingGroupId;
+        GenPostingType = genJournalLine.GeneralPostingType;
+        GeneralBusinessPostingGroupId = genJournalLine.GeneralBusinessPostingGroupId;
+        GeneralProductPostingGroupId = genJournalLine.GeneralProductPostingGroupId;
+        VATBusinessPostingGroupId = genJournalLine.VATBusinessPostingGroupId;
+        VATProductPostingGroupId = genJournalLine.VATProductPostingGroupId;
     }
 
 

@@ -18,7 +18,7 @@ namespace Api.Models
         public string CustomerName { get; set; } = "";
         public decimal Amount { get; set; }
         public string CustomerPostingGroupCode { get; set; } = "";
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public GenJournalDocumentType AppliesToDocType { get; set; }
         public string? AppliesToDocNo { get; set; }
         public bool Open { get; set; }

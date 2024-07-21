@@ -1,25 +1,31 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Api.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Models
 {
+    [Index(nameof(EntryNo), IsUnique=true)]
     public class VATEntry : Model
     {
         public int EntryNo { get; set; }
-        public Guid GenBusPostringGroupId { get; set; } 
-        public Guid GenProdPostingGroupId { get; set; } 
 
-        public DateOnly PostingDate { get; set; }
+        [ForeignKey(nameof(GeneralBusinessPostingGroup))]
+        public Guid GeneralBusinessPostringGroupId { get; set; } 
+
+        [ForeignKey(nameof(GeneralProductPostingGroup))]
+        public Guid GeneralProductPostingGroupId { get; set; } 
+
+        public DateTime PostingDate { get; set; }
         public string DocumentNo { get; set; } = "";
 
         public GenJournalDocumentType DocumentType { get; set; }
 
 
-        public GLGenPostingType Type { get; set; }
+        public GLGeneralPostingType Type { get; set; }
         public decimal Base { get; set; }
         public decimal Amount { get; set; }
-        public string UserId { get; set; } = "";
+        public Guid UserId { get; set; }
 
         [ForeignKey(nameof(ClosedByVATEntry))]
         public Guid ClosedByEntryNo { get; set; }
@@ -30,7 +36,7 @@ namespace Api.Models
         [ForeignKey(nameof(VATProductPostingGroup))]
         public Guid VATProdPostingGroupId { get; set; } 
         public decimal VATBaseDiscountPercentage { get; set; }
-        public DateOnly DocumentDate { get; set; }
+        public DateTime DocumentDate { get; set; }
         public bool Reversed { get; set; }
 
 
@@ -40,24 +46,23 @@ namespace Api.Models
 
         public VATEntry? ClosedByVATEntry;
 
-        public void CopyFromGenJnlLine(GenJournalLine genJournalLine)
+        public void CopyFromGenJnlLine(GeneralJournalLine genJournalLine)
         {
             CopyPostingGroupsFromGenJnlLine(genJournalLine);
             PostingDate = genJournalLine.PostingDate;
-            DocumentDate = genJournalLine.DocumentDate ?? genJournalLine.PostingDate;
+            DocumentDate = genJournalLine.DocumentDate;
             DocumentType = genJournalLine.DocumentType;
             DocumentNo = genJournalLine.DocumentNo;
             ExternalDocumentNo = genJournalLine.ExternalDocumentNo;
-            Type = genJournalLine.GenPostingType;
-            UserId = "TEST USER";
+            Type = genJournalLine.GeneralPostingType;
         }
 
-        public void CopyPostingGroupsFromGenJnlLine(GenJournalLine genJournalLine)
+        public void CopyPostingGroupsFromGenJnlLine(GeneralJournalLine genJournalLine)
         {
-            GenBusPostringGroupId = genJournalLine.GeneralBusinessPostingGroupId ;
-            GenProdPostingGroupId = genJournalLine.GeneralProductPostingGroupId ;
-            VATBusPostingGroupId = genJournalLine.VATBusPostingGroupId ;
-            VATProdPostingGroupId = genJournalLine.VATProdPostingGroupId ;
+            GeneralBusinessPostringGroupId = genJournalLine.GeneralBusinessPostingGroupId ;
+            GeneralProductPostingGroupId = genJournalLine.GeneralProductPostingGroupId ;
+            VATBusPostingGroupId = genJournalLine.VATBusinessPostingGroupId ;
+            VATProdPostingGroupId = genJournalLine.VATProductPostingGroupId ;
         }
     }
 

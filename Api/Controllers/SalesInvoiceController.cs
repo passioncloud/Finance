@@ -19,7 +19,7 @@ public class ApiInvoiceController(ApiDbContext apiDbContext) : ControllerBase
     [HttpGet]
     public IEnumerable<SalesHeader> GetApiInvoices(string search = "")
     {
-        return apiDbContext.ApiHeaders
+        return apiDbContext.SalesHeaders
         .Where(c => 
             EF.Functions.Like(c.CustomerName, $"%{search}%") ||
             EF.Functions.Like(c.Description, $"%{search}%") ||
@@ -41,7 +41,7 @@ public class ApiInvoiceController(ApiDbContext apiDbContext) : ControllerBase
     public async Task<SalesHeader> CreateApiInvoice(CreateApiInvoiceDto createApiInvoiceDto)
     {
         SalesHeader salesHeader = createApiInvoiceDto.CreateApiInvoice();
-        apiDbContext.ApiHeaders.Add(salesHeader);
+        apiDbContext.SalesHeaders.Add(salesHeader);
         await apiDbContext.SaveChangesAsync();
         return salesHeader;
     }
