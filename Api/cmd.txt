@@ -1,0 +1,6 @@
+generate migrations:
+dotnet ef migrations add InitialCreate
+
+manually apply migrations:
+dotnet ef database update
+

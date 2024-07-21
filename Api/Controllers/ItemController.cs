@@ -35,7 +35,7 @@ public class ItemController(ApiDbContext apiDbContext) : ControllerBase
         return item;
     }
 
-    [HttpPost]
+    [HttpGet]
     public async Task<Item> CreateItem(CreateItemDto createItemDto)
     {
         Item item = createItemDto.CreateItem();

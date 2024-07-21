@@ -5,13 +5,13 @@
 // import { useFormState } from "react-dom";
 // import { ICustomer } from "@/backend/models/Customer";
 import WorkSheetForm from "../WorkSheet/WorkSheetForm";
-// import { updateSalesJournalLine } from "@/backend/data/sales-journal-lines";
+// import { updateApiJournalLine } from "@/backend/data/sales-journal-lines";
 // import { revalidatePath } from "next/cache";
 // import MyDatePicker from "@/app/ui/WorkSheet/MyDatePicker";
 // import MyComboBox from "@/app/ui/WorkSheet/MyComboBox";
 
-export default function SalesJournalForm({ workSheetData }: { workSheetData: WorkSheetData }) {
-    // const [errors, formAction] = useFormState(createSalesOrder, { errors: { customerNo: '' } })
+export default function ApiJournalForm({ workSheetData }: { workSheetData: WorkSheetData }) {
+    // const [errors, formAction] = useFormState(createApiOrder, { errors: { customerNo: '' } })
 
     // const workSheetData: WorkSheetData = {
     //     columnDefinitions: [
@@ -65,7 +65,7 @@ export default function SalesJournalForm({ workSheetData }: { workSheetData: Wor
 
     async function onBlur(change: Record<string, string>, row: WorkSheetRow) : Promise<void> {
         console.log({ change, row })
-        // await updateSalesJournalLine(change, row)
+        // await updateApiJournalLine(change, row)
     }
 
     return (

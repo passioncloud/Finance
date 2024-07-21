@@ -21,8 +21,8 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
     // see: https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql#readme-body-tab
     string connectionString = builder.Configuration.GetConnectionString("DBConnection") ?? "No db connection string found!";
     Console.WriteLine(connectionString);
-    // options.UseMySQL(connectionString);
-    options.UseSqlServer(connectionString);
+    options.UseMySql(connectionString, new MySqlServerVersion("8.0"));
+    // options.UseSqlServer(connectionString);
     // The following three options help with debugging, but should
     // be changed or removed for production.
     // options.LogTo(Console.WriteLine, LogLevel.Information);
@@ -116,8 +116,8 @@ app.UseEndpoints(endpoints => endpoints.MapControllers());
 // ensure the database is created
 using (var serviceScope = app.Services.CreateScope())
 {
-    var salesDbContext = serviceScope.ServiceProvider.GetRequiredService<ApiDbContext>();
-    await salesDbContext.Database.MigrateAsync();
+    var apiDbContext = serviceScope.ServiceProvider.GetRequiredService<ApiDbContext>();
+    await apiDbContext.Database.MigrateAsync();
 }
 
 

@@ -27,6 +27,19 @@ public class ApiDbContext(DbContextOptions<ApiDbContext> options) : IdentityDbCo
 
 
     public DbSet<Customer> Customers { get; set; }
-    public DbSet<Item> Items { get;set; }
+    public DbSet<Item> Items { get; set; }
+    public DbSet<ApiHeader> ApiHeaders { get; set; }
+
+    public DbSet<GLAccount> GLAccounts { get; set; }
+    public DbSet<GLEntry> GLEntries { get; set; }
+    public DbSet<GenJournalLine> GenJournalLines { get; set; }
+    public DbSet<VATBusinessPostingGroup> VATBusinessPostingGroups { get; set; }
+    public DbSet<VATProductPostingGroup> VATProductPostingGroups { get; set; }
+    public DbSet<VATPostingSetup> VATPostingSetups { get; set; }
+    public DbSet<VATEntry> VATEntries { get; set; }
+    public DbSet<CustomerPostingGroup> CustomerPostingGroups { get; set; }
+    public DbSet<CustomerLedgerEntry> CustomerLedgerEntries { get; set; }
+    public DbSet<NoSeries> NoSeries { get; set; }
+
 
 }

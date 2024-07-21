@@ -3,7 +3,7 @@ using System;
 using Api;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,16 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240721091340_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Api.Authentication.ApplicationUser", b =>
                 {
@@ -51,7 +51,7 @@ namespace Api.Migrations
                         .HasAnnotation("DefaultValue", false);
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -107,8 +107,6 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -163,8 +161,6 @@ namespace Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -238,8 +234,6 @@ namespace Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(9, 2)
@@ -371,8 +365,6 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -395,8 +387,6 @@ namespace Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AccountCategory")
                         .HasColumnType("int");
@@ -564,8 +554,6 @@ namespace Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccountNo")
                         .HasColumnType("int")
@@ -782,8 +770,6 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<decimal>("Cost")
                         .HasPrecision(9, 2)
                         .HasColumnType("decimal(9,2)")
@@ -852,8 +838,6 @@ namespace Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -957,8 +941,6 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -968,7 +950,7 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("VATBusinessPostingGroupId")
+                    b.Property<int>("VATBusPostingGroupId")
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
@@ -977,7 +959,7 @@ namespace Api.Migrations
                         .HasColumnType("decimal(9,2)")
                         .HasAnnotation("DefaultValue", 0);
 
-                    b.Property<int>("VATProductPostingGroupId")
+                    b.Property<int>("VATProdPostingGroupId")
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
@@ -985,9 +967,9 @@ namespace Api.Migrations
 
                     b.HasIndex("SalesVATAccountId");
 
-                    b.HasIndex("VATBusinessPostingGroupId");
+                    b.HasIndex("VATBusPostingGroupId");
 
-                    b.HasIndex("VATProductPostingGroupId");
+                    b.HasIndex("VATProdPostingGroupId");
 
                     b.ToTable("VATPostingSetups");
                 });
@@ -999,17 +981,12 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Description")
-                        .IsUnique();
 
                     b.ToTable("VATProductPostingGroups");
                 });
@@ -1051,8 +1028,6 @@ namespace Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext")
                         .HasAnnotation("DefaultValue", "");
@@ -1079,8 +1054,6 @@ namespace Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("DefaultValue", 0);
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext")
@@ -1292,13 +1265,13 @@ namespace Api.Migrations
 
                     b.HasOne("Api.Models.VATBusinessPostingGroup", "VATBusinessPostingGroup")
                         .WithMany()
-                        .HasForeignKey("VATBusinessPostingGroupId")
+                        .HasForeignKey("VATBusPostingGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Api.Models.VATProductPostingGroup", "VATProductPostingGroup")
                         .WithMany()
-                        .HasForeignKey("VATProductPostingGroupId")
+                        .HasForeignKey("VATProdPostingGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
