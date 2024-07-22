@@ -34,7 +34,7 @@ public class GeneralJournalController : ControllerBase
     [HttpPost]
     public int Post()
     {
-        GenJnlPostLine genJnlPostLine = new GenJnlPostLine(_apiDbContext);
+        GeneralJournalPostLine genJnlPostLine = new GeneralJournalPostLine(_apiDbContext);
         GeneralJournalLine journalLine = _apiDbContext.GenJournalLines.OrderBy(g => g.LineNo).Last();
         int result = genJnlPostLine.RunWithoutCheck(journalLine);
         _apiDbContext.SaveChanges();

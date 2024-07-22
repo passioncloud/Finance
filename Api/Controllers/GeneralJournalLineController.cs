@@ -11,7 +11,7 @@ public class GeneralJournalLineController(ApiDbContext apiDbContext) : ModelCont
     [Route("{Id}/PostJournalLine")]
     public int PostJournalLine(Guid Id)
     {
-        GenJnlPostLine genJnlPostLine = new GenJnlPostLine(apiDbContext);
+        GeneralJournalPostLine genJnlPostLine = new GeneralJournalPostLine(apiDbContext);
         GeneralJournalLine journalLine = apiDbContext.GenJournalLines.OrderBy(g => g.LineNo).Last();
         int result = genJnlPostLine.RunWithoutCheck(journalLine);
         apiDbContext.SaveChanges();

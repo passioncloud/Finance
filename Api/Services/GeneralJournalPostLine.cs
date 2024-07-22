@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Utilities;
 
 namespace Api.Services
 {
-    public class GenJnlPostLine(ApiDbContext apiDbContext)
+    public class GeneralJournalPostLine(ApiDbContext apiDbContext)
     {
         private readonly GenJnlPostLineUtils postLineUtils = new(apiDbContext);
         private readonly ExchangeAccGLJournalLine exchangeAccGLJournalLine = new();
