@@ -4,7 +4,7 @@ using Api.Enums;
 
 namespace Api.Services
 {
-    public class GenJnlPostLineUtils(ApiDbContext apiDbContext)
+    public class GeneralJournalPostLineUtils(ApiDbContext apiDbContext)
     {
         public int GetNextGLEntryNo()
         {

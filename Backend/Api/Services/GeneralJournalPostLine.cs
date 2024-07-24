@@ -15,7 +15,7 @@ namespace Api.Services
 {
     public class GeneralJournalPostLine(ApiDbContext apiDbContext)
     {
-        private readonly GenJnlPostLineUtils postLineUtils = new(apiDbContext);
+        private readonly GeneralJournalPostLineUtils postLineUtils = new(apiDbContext);
         private readonly ExchangeAccGLJournalLine exchangeAccGLJournalLine = new();
         private GenJournalDocumentType? lastDocType;
         private string? lastDocNo;
