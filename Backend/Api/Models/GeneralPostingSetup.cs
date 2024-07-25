@@ -7,13 +7,13 @@ using Api.Enums;
 
 namespace Api.Models
 {
-    [Index(nameof(VATBusinessPostingGroupId),nameof(VATProductPostingGroupId), IsUnique = true)]
+    [Index(nameof(GeneralBusinessPostingGroupId),nameof(GeneralProductPostingGroupId), IsUnique = true)]
     public class GeneralPostingSetup : Model
     {
-        [ForeignKey(nameof(VATBusinessPostingGroup))]
-        public Guid VATBusinessPostingGroupId { get; set; }
-        [ForeignKey(nameof(VATProductPostingGroup))]
-        public Guid VATProductPostingGroupId { get; set; }
+        [ForeignKey(nameof(GeneralBusinessPostingGroup))]
+        public Guid GeneralBusinessPostingGroupId { get; set; }
+        [ForeignKey(nameof(GeneralProductPostingGroup))]
+        public Guid GeneralProductPostingGroupId { get; set; }
 
         [ForeignKey(nameof(SalesGLAccount))]
         public Guid SalesGLAccountId { get; set; }
@@ -22,14 +22,14 @@ namespace Api.Models
         public string Description { get; set; } = "";
 
 
-        public virtual VATBusinessPostingGroup? VATBusinessPostingGroup { get; set; }
-        public virtual VATProductPostingGroup? VATProductPostingGroup { get; set; }
+        public virtual GeneralBusinessPostingGroup? GeneralBusinessPostingGroup { get; set; }
+        public virtual GeneralProductPostingGroup? GeneralProductPostingGroup { get; set; }
 
         public virtual GLAccount? SalesGLAccount { get; set; }
 
         public Guid GetSalesGLAccount()
         {
-            // Check.NotEmptyNotNull(SalesVATAccountId);
+            // Check.NotEmptyNotNull(SalesGeneralAccountId);
             return SalesGLAccountId;
         }
 

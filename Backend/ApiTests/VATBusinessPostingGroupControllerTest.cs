@@ -18,6 +18,6 @@ public class VATBusinessPostingGroupControllerTest : IClassFixture<TestDatabaseF
         using ApiDbContext context = Fixture.CreateContext();
         int vatGroupCount =  context.VATBusinessPostingGroups.Count();
         Console.WriteLine($"Count is {vatGroupCount}");
-        Assert.Equal(1, vatGroupCount);
+        Assert.Equal(2, vatGroupCount);
     }
 }

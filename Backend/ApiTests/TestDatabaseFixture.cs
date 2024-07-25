@@ -6,7 +6,7 @@ namespace ApiTests;
 
 public class TestDatabaseFixture
 {
-    private const string ConnectionString = @"Database=financeTest; Host=localhost; Username=postgres;Password=stanislav100";
+    private const string ConnectionString = @$"Database=financeTest; Host=localhost; Username=postgres;Password=stanislav100;Include Error Detail=true";
     private static readonly object _lock = new();
     private static bool _databaseInitialized;
 
@@ -17,10 +17,11 @@ public class TestDatabaseFixture
         {
             if (!_databaseInitialized)
             {
-                using var context = CreateContext();
+                using ApiDbContext context = CreateContext();
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
-                context.AddRange(new VATBusinessPostingGroup());
+                SeedData seedData = new (context);
+                seedData.PopulateSeedData();
                 context.SaveChanges();
                 _databaseInitialized = true;
             }
@@ -30,8 +31,12 @@ public class TestDatabaseFixture
     public ApiDbContext CreateContext() => new ApiDbContext(
         new DbContextOptionsBuilder<ApiDbContext>()
             .UseNpgsql(ConnectionString)
-            // .UseSnakeCaseNamingConvention()
+            .UseSnakeCaseNamingConvention()
             .Options
     );
+
+
+
+
 
 }

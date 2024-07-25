@@ -25,7 +25,7 @@ public class GLEntry : Model
     public Guid BalAccountId { get; set; }
 
     public decimal Amount { get; set; }
-    public Guid UserId { get; set; } 
+    public Guid UserId { get; set; }
     public decimal Quantity { get; set; }
     public decimal VATAmount { get; set; }
     [ForeignKey(nameof(GeneralJournalBatch))]

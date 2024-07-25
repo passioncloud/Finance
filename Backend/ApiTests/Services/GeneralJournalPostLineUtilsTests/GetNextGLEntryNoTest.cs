@@ -14,6 +14,8 @@ public class GetNextGLEntryNoTest(TestDatabaseFixture Fixture) : IClassFixture<T
         // Given        
         GeneralJournalPostLineUtils generalJournalPostLineUtils = new(apiDbContext);
         // When
+        apiDbContext.GLEntries.RemoveRange(apiDbContext.GLEntries);
+        apiDbContext.SaveChanges();
         int nextEntryNo = generalJournalPostLineUtils.GetNextGLEntryNo();
         // Then
         Assert.Equal(1, nextEntryNo);
@@ -22,15 +24,50 @@ public class GetNextGLEntryNoTest(TestDatabaseFixture Fixture) : IClassFixture<T
     [Fact]
     public void ReturnsOnePlusLastEntryNo()
     {
-        // Given
+        // Given        
+         apiDbContext.GLEntries.RemoveRange(apiDbContext.GLEntries);
+         apiDbContext.SaveChanges();
         GeneralJournalPostLineUtils generalJournalPostLineUtils = new(apiDbContext);
-        apiDbContext.GLEntries.AddRange(new GLEntry() { EntryNo = 30 }, new() { EntryNo = 50 }, new() { EntryNo = 10 });
+        GLAccount gLAccount = apiDbContext.GLAccounts.First();
+        VATPostingSetup vATPostingSetup = apiDbContext.VATPostingSetups.First();
+        GeneralPostingSetup generalPostingSetup = apiDbContext.GeneralPostingSetups.First();
+        apiDbContext.GLEntries.AddRange(new GLEntry()
+        {
+            EntryNo = 30,
+            GLAccountId = gLAccount.Id,
+            Amount = 100,
+            Description = "Test",
+            VATBusinessPostingGroupId = vATPostingSetup.VATBusinessPostingGroupId,
+            VATProductPostingGroupId = vATPostingSetup.VATProductPostingGroupId,
+            GeneralBusinessPostingGroupId = generalPostingSetup.GeneralBusinessPostingGroupId,
+            GeneralProductPostingGroupId = generalPostingSetup.GeneralProductPostingGroupId,
+        }, new()
+        {
+            EntryNo = 50,
+            GLAccountId = gLAccount.Id,
+            Amount = 100,
+            Description = "Test",
+            VATBusinessPostingGroupId = vATPostingSetup.VATBusinessPostingGroupId,
+            VATProductPostingGroupId = vATPostingSetup.VATProductPostingGroupId,
+            GeneralBusinessPostingGroupId = generalPostingSetup.GeneralBusinessPostingGroupId,
+            GeneralProductPostingGroupId = generalPostingSetup.GeneralProductPostingGroupId,
+        }, new()
+        {
+            EntryNo = 10,
+            GLAccountId = gLAccount.Id,
+            Amount = 100,
+            Description = "Test",
+            VATBusinessPostingGroupId = vATPostingSetup.VATBusinessPostingGroupId,
+            VATProductPostingGroupId = vATPostingSetup.VATProductPostingGroupId,
+            GeneralBusinessPostingGroupId = generalPostingSetup.GeneralBusinessPostingGroupId,
+            GeneralProductPostingGroupId = generalPostingSetup.GeneralProductPostingGroupId,
+        });
         apiDbContext.SaveChanges();
 
         // When
         int nextEntryNo = generalJournalPostLineUtils.GetNextGLEntryNo();
         // Then
-        Assert.Equal(501, nextEntryNo);
+        Assert.Equal(51, nextEntryNo);
 
     }
 
