@@ -5,46 +5,52 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Models
 {
-    [Index(nameof(EntryNo), IsUnique=true)]
+    [Index(nameof(EntryNo), IsUnique = true)]
     public class VATEntry : Model
     {
         public int EntryNo { get; set; }
+        
+        [ForeignKey(nameof(VATBusinessPostingGroup))]
+        public Guid VATBusinessPostingGroupId { get; set; }
 
+        [ForeignKey(nameof(VATProductPostingGroup))]
+        public Guid VATProductPostingGroupId { get; set; }
+        
         [ForeignKey(nameof(GeneralBusinessPostingGroup))]
-        public Guid GeneralBusinessPostringGroupId { get; set; } 
+        public Guid GeneralBusinessPostringGroupId { get; set; }
 
         [ForeignKey(nameof(GeneralProductPostingGroup))]
-        public Guid GeneralProductPostingGroupId { get; set; } 
+        public Guid GeneralProductPostingGroupId { get; set; }
 
         public DateTime PostingDate { get; set; }
         public string DocumentNo { get; set; } = "";
 
         public GenJournalDocumentType DocumentType { get; set; }
-
-
         public GLGeneralPostingType Type { get; set; }
         public decimal Base { get; set; }
         public decimal Amount { get; set; }
         public Guid UserId { get; set; }
 
         [ForeignKey(nameof(ClosedByVATEntry))]
-        public Guid ClosedByEntryNo { get; set; }
+        public Guid? ClosedByEntryNo { get; set; }
         public bool Closed { get; set; }
         public string ExternalDocumentNo { get; set; } = "";
-        [ForeignKey(nameof(VATBusinessPostingGroup))]
-        public Guid VATBusPostingGroupId { get; set; } 
-        [ForeignKey(nameof(VATProductPostingGroup))]
-        public Guid VATProdPostingGroupId { get; set; } 
+
+
         public decimal VATBaseDiscountPercentage { get; set; }
         public DateTime DocumentDate { get; set; }
         public bool Reversed { get; set; }
 
 
-        public VATBusinessPostingGroup? VATBusinessPostingGroup { get; set; }
 
-        public VATProductPostingGroup? VATProductPostingGroup { get; set; }
 
-        public VATEntry? ClosedByVATEntry;
+
+        public virtual VATBusinessPostingGroup? VATBusinessPostingGroup { get; set; }
+        public virtual VATProductPostingGroup? VATProductPostingGroup { get; set; }
+        public virtual GeneralBusinessPostingGroup? GeneralBusinessPostingGroup { get; set; }
+        public virtual GeneralProductPostingGroup? GeneralProductPostingGroup { get; set; }
+
+        public virtual VATEntry? ClosedByVATEntry { get; set; }
 
         public void CopyFromGenJnlLine(GeneralJournalLine genJournalLine)
         {
@@ -59,10 +65,10 @@ namespace Api.Models
 
         public void CopyPostingGroupsFromGenJnlLine(GeneralJournalLine genJournalLine)
         {
-            GeneralBusinessPostringGroupId = genJournalLine.GeneralBusinessPostingGroupId ;
-            GeneralProductPostingGroupId = genJournalLine.GeneralProductPostingGroupId ;
-            VATBusPostingGroupId = genJournalLine.VATBusinessPostingGroupId ;
-            VATProdPostingGroupId = genJournalLine.VATProductPostingGroupId ;
+            GeneralBusinessPostringGroupId = genJournalLine.GeneralBusinessPostingGroupId;
+            GeneralProductPostingGroupId = genJournalLine.GeneralProductPostingGroupId;
+            VATBusinessPostingGroupId = genJournalLine.VATBusinessPostingGroupId;
+            VATProductPostingGroupId = genJournalLine.VATProductPostingGroupId;
         }
     }
 

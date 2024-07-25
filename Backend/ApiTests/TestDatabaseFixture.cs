@@ -28,7 +28,7 @@ public class TestDatabaseFixture
         }
     }
 
-    public ApiDbContext CreateContext() => new ApiDbContext(
+    public static ApiDbContext CreateContext() => new(
         new DbContextOptionsBuilder<ApiDbContext>()
             .UseNpgsql(ConnectionString)
             .UseSnakeCaseNamingConvention()

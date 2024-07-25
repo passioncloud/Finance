@@ -20,7 +20,6 @@ namespace Api.Services
 
         public GLAccount GetGLAccountById(Guid Id)
         {
-            Console.WriteLine($"GetGLAccountById {Id}");
             GLAccount? result = apiDbContext.GLAccounts.Find(Id) ?? throw new Exception($"Failed to find GL Account with Id {Id}");
             return result;
         }

@@ -4,15 +4,16 @@ using Api.Services;
 
 namespace ApiTests.Services.GeneralJournalPostLineUtilsTests;
 
-public class GetNextGLEntryNoTest(TestDatabaseFixture Fixture) : IClassFixture<TestDatabaseFixture>
+public class GetNextGLEntryNoTest() : IClassFixture<TestDatabaseFixture>
 {
-    readonly ApiDbContext apiDbContext = Fixture.CreateContext();
+    readonly static ApiDbContext apiDbContext = TestDatabaseFixture.CreateContext();
+    readonly GeneralJournalPostLineUtils generalJournalPostLineUtils = new(apiDbContext);
 
     [Fact]
     public void ReturnsOneIfNoGLEntryExists()
     {
         // Given        
-        GeneralJournalPostLineUtils generalJournalPostLineUtils = new(apiDbContext);
+
         // When
         apiDbContext.GLEntries.RemoveRange(apiDbContext.GLEntries);
         apiDbContext.SaveChanges();
@@ -25,9 +26,8 @@ public class GetNextGLEntryNoTest(TestDatabaseFixture Fixture) : IClassFixture<T
     public void ReturnsOnePlusLastEntryNo()
     {
         // Given        
-         apiDbContext.GLEntries.RemoveRange(apiDbContext.GLEntries);
-         apiDbContext.SaveChanges();
-        GeneralJournalPostLineUtils generalJournalPostLineUtils = new(apiDbContext);
+        apiDbContext.GLEntries.RemoveRange(apiDbContext.GLEntries);
+        apiDbContext.SaveChanges();
         GLAccount gLAccount = apiDbContext.GLAccounts.First();
         VATPostingSetup vATPostingSetup = apiDbContext.VATPostingSetups.First();
         GeneralPostingSetup generalPostingSetup = apiDbContext.GeneralPostingSetups.First();
